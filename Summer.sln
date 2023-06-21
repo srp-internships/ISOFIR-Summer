@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNinja", "Testing\TestNinja\TestNinja.csproj", "{23A35D1C-830D-43FD-8342-E339E05A322B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{9BFE1051-BBCE-4B6B-9A98-9404E17EE6B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNinja.Tests", "Testing\TestNinja.Tests\TestNinja.Tests.csproj", "{C9129606-F0C2-4411-9C1F-EF47CB0B0C43}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{23A35D1C-830D-43FD-8342-E339E05A322B} = {9BFE1051-BBCE-4B6B-9A98-9404E17EE6B5}
+		{C9129606-F0C2-4411-9C1F-EF47CB0B0C43} = {9BFE1051-BBCE-4B6B-9A98-9404E17EE6B5}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23A35D1C-830D-43FD-8342-E339E05A322B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23A35D1C-830D-43FD-8342-E339E05A322B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23A35D1C-830D-43FD-8342-E339E05A322B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23A35D1C-830D-43FD-8342-E339E05A322B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9129606-F0C2-4411-9C1F-EF47CB0B0C43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9129606-F0C2-4411-9C1F-EF47CB0B0C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9129606-F0C2-4411-9C1F-EF47CB0B0C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9129606-F0C2-4411-9C1F-EF47CB0B0C43}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
