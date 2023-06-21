@@ -36,7 +36,7 @@ public class MathTests
     [Test]
     [TestCase(1,new[]{1})]
     [TestCase(5, new[]{1,3,5})]
-    [TestCase(10, new[]{1,3,5,7,9})]
+    [TestCase(9, new[]{1,3,5,7,9})]
     public void GetOddNumbers_LimitIsGreaterThenZero_ReturnOddNumbers(int limit, IEnumerable<int> exceptedVariantOfResult)
     {
         var list = _math.GetOddNumbers(limit);
