@@ -1,17 +1,17 @@
 ﻿using TestNinja.Fundamentals;
 
-namespace TestNinja.Tests;
+namespace TestNinja.Tests.FundamentalsTests;
 
 [TestFixture]
 public class ErrorLoggerTests
 {
-    private ErrorLogger _errorLogger = null!;
-
     [SetUp]
     public void Setup()
     {
         _errorLogger = new ErrorLogger();
     }
+
+    private ErrorLogger _errorLogger = null!;
 
     [Test]
     public void Log_WhenCalled_FillLastErrorProperty()
@@ -28,7 +28,7 @@ public class ErrorLoggerTests
     [TestCase(null)]
     public void Log_MessageIsNullOrWhiteSpace(string message)
     {
-        Assert.That(()=>_errorLogger.Log(message),Throws.ArgumentNullException);
+        Assert.That(() => _errorLogger.Log(message), Throws.ArgumentNullException);
     }
 
     [Test]
@@ -38,7 +38,7 @@ public class ErrorLoggerTests
 
         _errorLogger.ErrorLogged += (_, argId) => id = argId;
         _errorLogger.Log("the event test log");
-        
-        Assert.That(id,Is.Not.EqualTo(Guid.Empty));
+
+        Assert.That(id, Is.Not.EqualTo(Guid.Empty));
     }
 }

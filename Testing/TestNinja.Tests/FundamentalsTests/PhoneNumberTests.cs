@@ -1,6 +1,6 @@
 ﻿using TestNinja.Fundamentals;
 
-namespace TestNinja.Tests;
+namespace TestNinja.Tests.FundamentalsTests;
 
 [TestFixture]
 public class PhoneNumberTests
@@ -11,7 +11,7 @@ public class PhoneNumberTests
     [TestCase(" ")]
     public void Parse_ArgIsNullOrWriteSpace_ThrowArgumentException(string arg)
     {
-        Assert.That(()=>PhoneNumber.Parse(arg),Throws.ArgumentException);
+        Assert.That(() => PhoneNumber.Parse(arg), Throws.ArgumentException);
     }
 
     [Test]
@@ -42,7 +42,7 @@ public class PhoneNumberTests
         var phoneNumber = PhoneNumber.Parse("1234567890");
 
         var result = phoneNumber.ToString();
-        
-        Assert.That(result,Is.EqualTo("(123)456-7890"));
+
+        Assert.That(result, Is.EqualTo("(123)456-7890"));
     }
 }
