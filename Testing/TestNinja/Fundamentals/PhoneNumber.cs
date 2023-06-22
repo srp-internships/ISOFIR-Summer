@@ -21,15 +21,15 @@ public class PhoneNumber
         if (number.Length != 10)
             throw new ArgumentException("Phone number should be 10 digits long.");
 
-        var area = number.Substring(0, 3);
+        var area = number[..3];
         var major = number.Substring(3, 3);
-        var minor = number.Substring(6);
+        var minor = number[6..];
 
         return new PhoneNumber(area, major, minor);
     }
 
     public override string ToString()
     {
-        return string.Format($"({Area}){Major}-{Minor}");
+        return $"({Area}){Major}-{Minor}";
     }
 }
