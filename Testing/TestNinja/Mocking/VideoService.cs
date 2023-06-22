@@ -1,34 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using TestNinja.Repositories.Interfaces;
 
 namespace TestNinja.Mocking;
 
 public class VideoService
 {
+    private readonly IFileRepository _fileRepository;
+    private readonly IVideoRepository _videoRepository;
+    public VideoService(IFileRepository fileRepository, IVideoRepository videoRepository)
+    {
+        _fileRepository = fileRepository;
+        _videoRepository = videoRepository;
+    }
     public string ReadVideoTitle()
     {
-        var str = File.ReadAllText("video.txt");
-        var video = JsonConvert.DeserializeObject<Video>(str);
-        if (video == null)
-            return "Error parsing the video.";
-        return video.Title;
+        var videoJson = _fileRepository.GetAllText("video.json");
+        var video = JsonConvert.DeserializeObject<Video>(videoJson);
+        return video == null ? "Error parsing the video." : video.Title;
     }
 
     public string GetUnprocessedVideosAsCsv()
     {
-        var videoIds = new List<int>();
-
-        using (var context = new VideoContext())
-        {
-            var videos =
-                (from video in context.Videos
-                    where !video.IsProcessed
-                    select video).ToList();
-
-            videoIds.AddRange(videos.Select(v => v.Id));
-
-            return string.Join(",", videoIds);
-        }
+        var videos = _videoRepository.GetAll();
+        var videoIds = videos.Where(s => !s.IsProcessed).Select(s => s.Id).ToList();
+        
+        return string.Join(",", videoIds);
     }
 }
 
