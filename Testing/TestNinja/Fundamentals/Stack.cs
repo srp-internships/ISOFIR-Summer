@@ -9,7 +9,7 @@ public class Stack<T>
     public void Push(T obj)
     {
         if (obj == null)
-            throw new ArgumentNullException();
+            throw new ArgumentNullException(nameof(obj));
 
         _list.Add(obj);
     }
@@ -19,7 +19,7 @@ public class Stack<T>
         if (_list.Count == 0)
             throw new InvalidOperationException();
 
-        var result = _list[_list.Count - 1];
+        var result = _list[^1];
         _list.RemoveAt(_list.Count - 1);
 
         return result;
@@ -31,6 +31,6 @@ public class Stack<T>
         if (_list.Count == 0)
             throw new InvalidOperationException();
 
-        return _list[_list.Count - 1];
+        return _list[^1];
     }
 }
