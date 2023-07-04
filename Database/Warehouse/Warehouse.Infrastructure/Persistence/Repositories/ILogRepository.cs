@@ -1,4 +1,5 @@
-﻿using Warehouse.Application.Common.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Warehouse.Application.Common.Interfaces.Repositories;
 using WareHouse.Core.Models;
 using Warehouse.Infrastructure.Persistence.Database;
 
@@ -20,7 +21,7 @@ public class InvoiceLogRepository : IInvoiceLogRepository
 
     public IEnumerable<InvoiceLog> GetIEnumerable()
     {
-        return _context.InvoiceLogs;
+        return _context.InvoiceLogs.Include(s=>s.Rest).ThenInclude(s=>s.Product);
     }
 
     public int Save()

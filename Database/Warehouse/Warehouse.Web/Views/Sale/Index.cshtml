@@ -1,0 +1,105 @@
+﻿@using Warehouse.Application.ResponseModels
+@model Warehouse.Application.RequestModels.SaleRequestModel
+
+@{
+    ViewBag.Title = "Sale";
+    Layout = "_Layout";
+}
+<table class="table" xmlns="">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">product name</th>
+        <th scope="col">clientName</th>
+        <th scope="col">quantity</th>
+        <th scope="col">invoice price</th>
+        <th scope="col">salePrice</th>
+        <th scope="col">Income</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (ViewBag.ClientsHistory != null)
+    {
+        var clientsHistory = (List<ClientsHistoryResponseModel>)ViewBag.ClientsHistory;
+        for (var i = 0; i < clientsHistory.Count; i++)
+        {
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@(clientsHistory[i].ProductName)</td>
+                <td>@(clientsHistory[i].ClientName)</td>
+                <td>@(clientsHistory[i].Quantity)</td>
+                <td>@(clientsHistory[i].InvoicePrice)</td>
+                <td>@(clientsHistory[i].SalePrice)</td>
+                <td>@(clientsHistory[i].Income)</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="modalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="modalCenterTitle">Товары</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <form method="post" asp-action="Sale">
+                <div class="modal-body">
+                    <div class="card-body">
+                        <div class="mt-2">
+                            <label class="form-label">Quantity</label>
+                            <input type="text" class="form-control" aria-describedby="defaultFormControlHelp" asp-for="Quantity">
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label">Price</label>
+                            <input type="text" class="form-control" aria-describedby="defaultFormControlHelp" asp-for="Price">
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label"></label>
+                            <select asp-for="ProductId">
+                                @if (ViewBag.Products != null)
+                                {
+                                    var products = (List<ProductResponseModel>)ViewBag.Products;
+                                    foreach (var product in products)
+                                    {
+                                        <option value="@(product.Id)">@(product.Name)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label"></label>
+                            <select asp-for="ClientId">
+                                @if (ViewBag.Clients != null)
+                                {
+                                    var clients = (List<ClientResponseModel>)ViewBag.Clients;
+                                    foreach (var client in clients)
+                                    {
+                                        <option value="@(client.Id)">@(client.Name)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Сохранить Данные</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" onclick="onRecordClickNew()">
+    Добавить
+</button>
+<script type="text/javascript" src="/js/ModalViewer.js"></script>

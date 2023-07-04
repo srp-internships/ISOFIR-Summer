@@ -1,0 +1,89 @@
+﻿@using Warehouse.Application.ResponseModels
+@model Warehouse.Application.RequestModels.InvoiceRequestModel
+
+@{
+    ViewBag.Title = "Invoice";
+    Layout = "_Layout";
+}
+
+<table class="table" xmlns="">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Product name</th>
+        <th scope="col">invoice price</th>
+        <th scope="col">quantity</th>
+        <th scope="col">Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (ViewBag.Invoices != null)
+    {
+        var invoices = (List<InvoiceHistoryResponseModel>)ViewBag.Invoices;
+        for (var i = 0; i < invoices.Count; i++)
+        {
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@(invoices[i].ProductName)</td>
+                <td>@(invoices[i].Price)</td>
+                <td>@(invoices[i].Quantity)</td>
+                <td>@(invoices[i].DateTime)</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="modalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="modalCenterTitle">Товары</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <form method="post" asp-action="Invoice">
+                <div class="modal-body">
+                    <div class="card-body">
+                        <div class="mt-2">
+                            <label class="form-label">Quantity</label>
+                            <input type="text" class="form-control" aria-describedby="defaultFormControlHelp" asp-for="Quantity">
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label">invoice price</label>
+                            <input type="text" class="form-control" aria-describedby="defaultFormControlHelp" asp-for="Price">
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label">Product</label>
+                            <select asp-for="ProductId">
+                                @if (ViewBag.Products != null)
+                                {
+                                    var products = (List<ProductResponseModel>)ViewBag.Products;
+                                    foreach (var product in products)
+                                    {
+                                        <option value="@(product.Id)">@(product.Name)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Сохранить Данные</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" onclick="onRecordClickNew()">
+    new invoice
+</button>
+<script type="text/javascript" src="/js/ModalViewer.js"></script>

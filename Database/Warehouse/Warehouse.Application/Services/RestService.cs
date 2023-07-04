@@ -30,7 +30,7 @@ public class RestService:IRestService
     public void Invoice(InvoiceRequestModel model)
     {
         var rest = _restRepository.GetIEnumerable()
-            .FirstOrDefault(s => s.ProductId == model.ProductId && model.Price == s.Price);
+            .FirstOrDefault(s => s.ProductId == model.ProductId);
         if (rest==null)
         {
             rest = new Rest

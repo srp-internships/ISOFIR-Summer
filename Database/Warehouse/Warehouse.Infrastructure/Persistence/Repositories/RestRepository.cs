@@ -1,4 +1,5 @@
-﻿using Warehouse.Application.Common.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Warehouse.Application.Common.Interfaces.Repositories;
 using WareHouse.Core.Models;
 using Warehouse.Infrastructure.Persistence.Database;
 
@@ -29,7 +30,7 @@ public class RestRepository:IRestRepository
 
     public IEnumerable<Rest> GetIEnumerable()
     {
-        return _context.Rests;
+        return _context.Rests.Include(s=>s.Product);
     }
 
     public int Save()

@@ -20,17 +20,17 @@ public class ProductService:IProductService
 
     public void CreateOrEdit(ProductRequestModel productDto)
     {
-        var client = _mapper.Map<ProductRequestModel, Product>(productDto);
-        if (client!=null)
+        var product = _mapper.Map<ProductRequestModel, Product>(productDto);
+        if (product!=null)
         {
-            var old = _productRepository.GetIEnumerable().FirstOrDefault(s => s.Id == client.Id);
+            var old = _productRepository.GetIEnumerable().FirstOrDefault(s => s.Id == product.Id);
             if (old!=null)
             {
-                _mapper.Map(client, old);
+                _mapper.Map(productDto, old);
             }
             else
             { 
-                _productRepository.Add(client);
+                _productRepository.Add(product);
             }
 
             _productRepository.Save();

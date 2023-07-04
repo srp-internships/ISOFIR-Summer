@@ -1,3 +1,4 @@
+using System.Net;
 using Warehouse.Application;
 using Warehouse.Infrastructure;
 
@@ -7,7 +8,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
-
+builder.WebHost.UseKestrel(s => s.Listen(IPAddress.Any, 80));
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

@@ -10,7 +10,8 @@ public class AutoMapperConfigurations : Profile
     public AutoMapperConfigurations()
     {
         CreateMap<InvoiceLog, InvoiceHistoryResponseModel>()
-            .ForMember(s => s.ProductName, opt => opt.MapFrom(f => f.Rest.Product.Name));
+            .ForMember(s => s.ProductName, opt => opt.MapFrom(f => f.Rest.Product.Name))
+            .ForMember(m=>m.Quantity,opt=>opt.MapFrom(f=>f.Quantity));
         
         CreateMap<ClientRequestModel, Client>();
         CreateMap<Client, ClientResponseModel>();

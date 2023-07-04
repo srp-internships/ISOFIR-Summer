@@ -26,7 +26,7 @@ public class ClientService:IClientService
             var old = _clientRepository.GetIEnumerable().FirstOrDefault(s => s.Id == client.Id);
             if (old!=null)
             {
-                _mapper.Map(client, old);
+                _mapper.Map(clientDto, old);
             }
             else
             {

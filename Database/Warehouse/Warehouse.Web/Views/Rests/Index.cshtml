@@ -1,0 +1,30 @@
+﻿@using Warehouse.Application.ResponseModels
+@{
+    ViewBag.Title = "Rests in warehouse";
+    Layout = "_Layout";
+}
+
+<table class="table" xmlns="">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Название</th>
+        <th scope="col">Остаток</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (ViewBag.Rests != null)
+    {
+        var clientsHistory = (List<RestResponseModel>)ViewBag.Rests;
+        for (var i = 0; i < clientsHistory.Count; i++)
+        {
+            <tr>
+                <th scope="row">@(i + 1)</th>
+                <td>@(clientsHistory[i].ProductName)</td>
+                <td>@(clientsHistory[i].Quantity)</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
