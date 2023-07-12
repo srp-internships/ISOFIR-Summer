@@ -1,0 +1,14 @@
+﻿@using Report.Application.ResponseModels
+@{
+    Layout = null;
+}
+
+
+@if (ViewBag.RestProducts != null)
+{
+    var products = (List<GetRestProductsNameResponseModel>)ViewBag.RestProducts;
+    foreach (var product in products)
+    {
+        <button onclick="ViewRestsByProduct(@product.Id)" class="btn btn-dark" type="button">@product.Name</button>
+    }
+}

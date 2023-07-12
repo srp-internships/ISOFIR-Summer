@@ -1,0 +1,27 @@
+﻿@using Report.Application.ResponseModels
+@{
+    Layout = null;
+}
+<table class="table">
+    <thead>
+    <tr>
+        <th>Остаток</th>
+        <th>Склад</th>
+        <th>Цена покупки(сомони)</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (ViewBag.RestProducts != null)
+    {
+        var products = (List<GetRestsByProductResponseModel>)ViewBag.RestProducts;
+        foreach (var product in products)
+        {
+            <tr onclick="RestSelected(@product.RestId)">
+                <td>@product.Quantity</td>
+                <td>@product.StorageName</td>
+                <td>@product.PriceTjs</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>

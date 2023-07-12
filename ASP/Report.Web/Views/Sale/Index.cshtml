@@ -1,0 +1,101 @@
+﻿@using Report.Application.ResponseModels
+@model Report.Application.RequestModels.SaleRequestModel
+
+@{
+    ViewBag.Title = "Продажа";
+    Layout = "_Layout";
+}
+<form asp-action="Sale" method="post">
+    <input type="hidden" asp-for="RestId"/>
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-3">
+                <div>
+                    <label>Категория</label>
+                    <select class="form-select">
+                        @if (ViewBag.Categories != null)
+                        {
+                            var categories = (List<CategoryResponseModel>)ViewBag.Categories;
+                            foreach (var category in categories)
+                            {
+                                <option value="@(category.Id)" onclick="ViewProductsByCategory(@(category.Id))">@category.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="row overflow-auto" id="ProductsList">
+                </div>
+            </div>
+            <div class="col">
+                <div class="col overflow-auto" id="Rests">
+
+                </div>
+                <div class="col overflow-auto">
+                        <label>Клиент</label>
+                        <select class="form-select" asp-for="ClientId">
+                            @if (ViewBag.Clients != null)
+                            {
+                                var clients = (List<GetClientForSelectResponseModel>)ViewBag.Clients;
+                                foreach (var client in clients)
+                                {
+                                    <option value="@client.Id" onselect="ClientSelected(@client.Id)">@client.Name</option>
+                                }
+                            }
+                        </select>
+                    <div class="row" id="ClientHistory"></div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div>
+                    <label>Количество</label>
+                    <input type="number" asp-for="Quantity"/>
+                    
+                    <label>Цена продажи(TJS)</label>
+                    <input type="number" asp-for="SalePriceTjs"/>
+                    
+                    <label>Цена продажи(USD)</label>
+                    <input type="number" asp-for="SalePriceUsd"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn-primary btn">Завершить покупку!</button>
+</form>
+<script>
+function ViewProductsByCategory(categoryId){
+    $.ajax({
+        type: "POST",              
+        url: "/Sale/GetProductsByCategory",        
+        data: { 
+            categoryId:categoryId
+        },
+        datatype: "html",
+        success: function (data) {
+                document.getElementById('ProductsList').innerHTML='';
+                $('#ProductsList').html(data);
+            }
+        });
+    }
+    function ViewRestsByProduct(productId){
+    $.ajax({
+        type: "POST",              
+        url: "/Sale/GetRestsByProduct",        
+        data: { 
+            productId:productId
+        },
+        datatype: "html",
+        success: function (data) {
+                document.getElementById('Rests').innerHTML='';
+                $('#Rests').html(data);
+            }
+        });
+    }
+    
+    function ClientSelected(clientId){
+            
+    }
+    
+    function RestSelected(restId){
+        document.getElementById('RestId').value=restId;
+    }
+</script>

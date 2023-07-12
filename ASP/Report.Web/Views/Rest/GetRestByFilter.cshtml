@@ -1,0 +1,36 @@
+﻿@using Report.Application.ResponseModels
+
+@{
+    Layout =null;
+}
+
+<table class="table">
+    <thead>
+    <tr>
+        <td>Продукт</td>
+        <td>Количество</td>
+        <td>Себестоимость</td>
+        <td>Сумма</td>
+        <td>Склад</td>
+        <td>Фирма</td>
+    </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.Rests != null)
+        {
+            var rests = (List<RestProductResponseModel>)ViewBag.Rests;
+            foreach (var rest in rests)
+            {
+                <tr>
+                    <td>@rest.ProductName</td>
+                    <td>@rest.Quantity</td>
+                    <td>@rest.PriceUsd</td>
+                    <td>@rest.Sum</td>
+                    <td>@rest.StorageName</td>
+                    <td>@rest.FirmName</td>
+                </tr>
+            }
+        }
+    </tbody>
+
+</table>
