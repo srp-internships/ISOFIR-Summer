@@ -54,15 +54,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Report.Infrastructure\Report.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Views\ReasonCashBox\Index.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\" />
     </ItemGroup>
 
 </Project>

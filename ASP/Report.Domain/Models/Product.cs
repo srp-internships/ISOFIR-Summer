@@ -1,4 +1,4 @@
-﻿namespace Report.Core.Models;
+﻿namespace Report.Domain.Models;
 
 public class Product:BaseModel
 {
@@ -9,4 +9,5 @@ public class Product:BaseModel
 
     public IEnumerable<RestProduct>? RestProducts { get; set; }
     public IEnumerable<InvoiceLog>? InvoiceLogs { get; set; }
+    public IEnumerable<MoveProductLog>? MoveProductsLogs { get; set; }
 }

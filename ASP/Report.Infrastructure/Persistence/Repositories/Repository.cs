@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Report.Application.Common.Interfaces.Repositories;
-using Report.Core.Models;
+using Report.Domain.Models;
 using Report.Infrastructure.Persistence.DataBase;
 
 namespace Report.Infrastructure.Persistence.Repositories;
@@ -32,20 +32,20 @@ public class Repository<TEntity>:IRepository<TEntity> where TEntity :BaseModel
         return Set.ToListAsync();
     }
     
-    public void Remove(int id)
+    public async Task RemoveAsync(int id)
     {
-        var entity = Set.First(s => s.Id == id);
+        var entity = await Set.FirstAsync(s => s.Id == id);
         Set.Remove(entity);
     }
 
 
-    public void Add(TEntity entity)
+    public async Task AddAsync(TEntity entity)
     {
-        Set.Add(entity);
+        await Set.AddAsync(entity);
     }
 
-    public int SaveChanges()
+    public Task<int> SaveChangesAsync()
     {
-        return Context.SaveChanges();
+        return Context.SaveChangesAsync();
     }
 }

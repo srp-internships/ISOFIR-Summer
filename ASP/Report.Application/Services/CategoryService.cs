@@ -3,8 +3,8 @@ using Report.Application.Common.Interfaces.Repositories;
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using Report.Core.Models;
+using Report.Domain.ActionResults;
+using Report.Domain.Models;
 
 namespace Report.Application.Services;
 
@@ -19,7 +19,7 @@ public class CategoryService : ICategoryService
         _mapper = mapper;
     }
 
-    public async Task<Result> CreateOrUpdate(CategoryRequestModel categoryDto)
+    public async Task<Result> CreateOrUpdateAsync(CategoryRequestModel categoryDto)
     {
         try
         {
@@ -32,9 +32,9 @@ public class CategoryService : ICategoryService
             if (old!=null)
                 old.Name = category.Name;
             else
-                _categoryRepository.Add(category);
+                await _categoryRepository.AddAsync(category);
 
-            _categoryRepository.SaveChanges();
+            await _categoryRepository.SaveChangesAsync();
             return new OkResult();
         }
         catch (Exception e)
@@ -43,16 +43,16 @@ public class CategoryService : ICategoryService
         }
     }
 
-    public Result Remove(int id)
+    public async Task<Result> RemoveAsync(int id)
     {
         try
         {
-            _categoryRepository.Remove(id);
+            await _categoryRepository.RemoveAsync(id);
             return new OkResult();
         }
         catch (Exception e)
         {
-            return new ErrorResult(e, "Не возможно удалить несуществующий обект");
+            return new ErrorResult(e, "Не возможно удалить несуществующий объект");
         }
     }
 

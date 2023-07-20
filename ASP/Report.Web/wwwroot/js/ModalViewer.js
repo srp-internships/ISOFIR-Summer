@@ -20,3 +20,9 @@ function onRecordClickNew()
     var myModal = new bootstrap.Modal(document.getElementById('modalCenter'))
     myModal.show();
 }
+
+function ShowModal(modalId)
+{
+    var myModal = new bootstrap.Modal(document.getElementById(modalId))
+    myModal.show();
+}

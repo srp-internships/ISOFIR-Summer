@@ -1,11 +1,12 @@
 ﻿using Report.Application.RequestModels;
-using Report.Core.ActionResults;
+using Report.Domain.ActionResults;
 
 namespace Report.Application.Common.Interfaces.Services;
 
 public interface IStorageService
 {
-    public Task<Result> CreateOrUpdate(StorageRequestModel storageDto);
-    public Result Remove(int id);
+    public Task<Result> CreateOrUpdateAsync(StorageRequestModel storageDto);
+    public Task<Result> RemoveAsync(int id);
     public Task<Result> GetAllAsync();
+    public Task<Result> GetStorageRestsAsync(int storageId);
 }

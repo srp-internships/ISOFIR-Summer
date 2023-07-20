@@ -1,0 +1,77 @@
+﻿@using Newtonsoft.Json
+@using Report.Application.ResponseModels
+@model Report.Application.RequestModels.CashBoxRequestModel
+
+@{
+    ViewBag.Title = "Кассы";
+    Layout = "_Layout";
+}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Название</th>
+        <th scope="col">TJS</th>
+        <th scope="col">USD</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (ViewBag.CashBoxes != null)
+    {
+        var cashBoxes = (List<CashBoxResponseModel>)ViewBag.CashBoxes;
+        for (var i = 0; i < cashBoxes.Count; i++)
+        {
+            var json = JsonConvert.SerializeObject(cashBoxes[i], new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            <tr onclick="onRecordClick('@json')">
+                <th scope="row">@(i + 1)</th>
+                <td>@(cashBoxes[i].Name)</td>
+                <td>@(cashBoxes[i].CashTjs)</td>
+                <td>@(cashBoxes[i].CashUsd)</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="modalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="modalCenterTitle">Категории</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <form method="post" asp-action="AddCashBox">
+                <div class="modal-body">
+                    <input type="hidden" asp-for="Id" id="Id"/>
+                    <div class="card-body">
+                        <div class="mt-2">
+                            <label class="form-label">Имя</label>
+                            <input type="text" class="form-control" aria-describedby="defaultFormControlHelp" asp-for="Name">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Сохранить Данные</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" onclick="onRecordClickNew()">
+    Добавить
+</button>
+
+<script type="text/javascript" src="/js/ModalViewer.js"></script>

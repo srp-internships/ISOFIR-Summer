@@ -61,29 +61,63 @@
         <nav class="navbar-dark">
             <ul class="navbar-nav">
                 <li>
-                    <div class="text-muted small fw-bold text-uppercase px-3">CORE</div>
+                    <div class="text-muted small fw-bold text-uppercase px-3">Основные</div>
                 </li>
                 <li>
                     <a class="nav-link px-3 active"><span class="me-2"><i class="bi bi-speedometer2"></i></span>
-                        <span>Dashboard</span>
+                        <span>Главная страница</span>
                     </a>
                 </li>
                 
                 <li class="my-4"><hr class="dropdown-divider bg-light"/></li>
                 
                 <li>
-                    <div class="text-muted small fw-bold text-uppercase px-3">Архив</div>
+                    <div class="text-muted small fw-bold text-uppercase px-3">Бизнес процесс</div>
                 </li>
                 <li>
-                    <a asp-controller="Category" asp-action="Categories" class="nav-link px-3 active">
+                    <a asp-controller="Sale" asp-action="Index" class="nav-link px-3 active">
                         <span class="me-2"><i class="bi bi-list"></i></span>
-                        <span>Категории</span>
+                        <span>Продажа</span>
                     </a>
+                </li>
+                <li>
+                    <a asp-controller="Invoice" asp-action="Index" class="nav-link px-3 active">
+                        <span class="me-2"><i class="bi bi-list"></i></span>
+                        <span>Покупка</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a asp-controller="Move" asp-action="Index" class="nav-link px-3 active">
+                        <span class="me-2"><i class="bi bi-list"></i></span>
+                        <span>Перемещения</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a asp-controller="Rest" asp-action="Index" class="nav-link px-3 active">
+                        <span class="me-2"><i class="bi bi-list"></i></span>
+                        <span>Остатки</span>
+                    </a>
+                </li>
+
+
+                <li class="my-4"><hr class="dropdown-divider bg-light"/></li>
+                
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">Архив</div>
                 </li>
                 <li>
                     <a asp-controller="Product" asp-action="Index" class="nav-link px-3 active">
                         <span class="me-2"><i class="bi bi-list"></i></span>
                         <span>Продукты</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a asp-controller="Client" asp-action="Index" class="nav-link px-3 active">
+                        <span class="me-2"><i class="bi bi-list"></i></span>
+                        <span>Клиенты</span>
                     </a>
                 </li>
                 <li>
@@ -99,29 +133,44 @@
                     </a>
                 </li>
                 <li>
-                    <a asp-controller="Invoice" asp-action="Index" class="nav-link px-3 active">
+                    <a asp-controller="Category" asp-action="Categories" class="nav-link px-3 active">
                         <span class="me-2"><i class="bi bi-list"></i></span>
-                        <span>Покупка</span>
+                        <span>Категории</span>
                     </a>
                 </li>
                 <li>
-                    <a asp-controller="Client" asp-action="Index" class="nav-link px-3 active">
+                    <a asp-controller="Reason" asp-action="Index" class="nav-link px-3 active">
                         <span class="me-2"><i class="bi bi-list"></i></span>
-                        <span>Клиенты</span>
+                        <span>Заметки</span>
                     </a>
                 </li>
+                <li class="my-4"><hr class="dropdown-divider bg-light"/></li>
+                                
                 <li>
-                    <a asp-controller="Rest" asp-action="Index" class="nav-link px-3 active">
-                        <span class="me-2"><i class="bi bi-list"></i></span>
-                        <span>Остатки</span>
-                    </a>
+                    <div class="text-muted small fw-bold text-uppercase px-3">Касса</div>
                 </li>
+                
                 <li>
-                    <a asp-controller="Sale" asp-action="Index" class="nav-link px-3 active">
+                    <a asp-controller="CashBox" asp-action="Index" class="nav-link px-3 active">
                         <span class="me-2"><i class="bi bi-list"></i></span>
-                        <span>Продажа</span>
+                        <span>Кассы</span>
                     </a>
                 </li>
+                
+                <li>
+                    <a asp-controller="ClientCashBox" asp-action="Index" class="nav-link px-3 active">
+                        <span class="me-2"><i class="bi bi-list"></i></span>
+                        <span>Клиент</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a asp-controller="ReasonCashBox" asp-action="Index" class="nav-link px-3 active">
+                        <span class="me-2"><i class="bi bi-list"></i></span>
+                        <span>Заметки</span>
+                    </a>
+                </li>
+                
                 <li class="my-4"><hr class="dropdown-divider bg-light"/></li>
             </ul>
         </nav>

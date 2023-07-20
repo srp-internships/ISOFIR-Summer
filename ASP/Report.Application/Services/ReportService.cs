@@ -2,8 +2,8 @@
 using Report.Application.Common.Interfaces.Repositories;
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using Report.Core.Models;
+using Report.Domain.ActionResults;
+using Report.Domain.Models;
 
 namespace Report.Application.Services;
 
@@ -36,7 +36,7 @@ public class ReportService:IReportService
         }
     }
 
-    public Task<Result> GetClientHistory(int clientId)
+    public Task<Result> GetClientHistoryAsync(int clientId)
     { 
         throw new NotImplementedException();
     }

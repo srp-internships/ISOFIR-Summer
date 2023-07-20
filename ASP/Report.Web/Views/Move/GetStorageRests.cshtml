@@ -1,0 +1,19 @@
+﻿@using Report.Application.ResponseModels
+
+@{
+    Layout = null;
+}
+
+
+@if (ViewBag.Rests != null)
+{
+    var rests = (List<RestProductResponseModel>)ViewBag.Rests;
+    foreach (var rest in rests)
+    {
+        <tr onclick="RestClick(@rest.Id,'@rest.ProductName')">
+            <td>@rest.ProductName</td>
+            <td>@rest.Quantity</td>
+            <td>@rest.PriceUsd</td>
+        </tr>
+    }
+}

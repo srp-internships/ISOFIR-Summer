@@ -1,16 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Report.Application.Common.Interfaces.Repositories;
-using Report.Core.Models;
+using Report.Domain.Models;
 using Report.Infrastructure.Persistence.DataBase;
 
 namespace Report.Infrastructure.Persistence.Repositories;
 
-public class RestProductProductRepository:Repository<RestProduct>, IRestProductRepository
+public class RestProductRepository:Repository<RestProduct>, IRestProductRepository
 {
-    public RestProductProductRepository(DataContext context) : base(context)
+    public RestProductRepository(DataContext context) : base(context)
     {
     }
-    
+
+    public new Task<RestProduct?> GetByIdAsync(int id)
+    {
+        return Set.Include(s => s.Product).FirstOrDefaultAsync(s => s.Id == id);
+    }
+
     public Task<List<RestProduct>> GetRestByCategory(int categoryId)
     {
         return Context.RestProducts.Include(s => s.Product)

@@ -1,5 +1,4 @@
-﻿using Report.Core.ActionResults;
-using Report.Core.Models;
+﻿using Report.Domain.Models;
 
 namespace Report.Application.Common.Interfaces.Repositories;
 

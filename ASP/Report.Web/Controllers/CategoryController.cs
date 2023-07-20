@@ -2,8 +2,8 @@
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using OkResult = Report.Core.ActionResults.OkResult;
+using Report.Domain.ActionResults;
+using OkResult = Report.Domain.ActionResults.OkResult;
 
 namespace Report.Web.Controllers;
 
@@ -37,11 +37,11 @@ public class CategoryController : Controller
     [HttpPost]
     public async Task<IActionResult> AddCategory(CategoryRequestModel category)
     {
-        var response = await _categoryService.CreateOrUpdate(category);
+        var response = await _categoryService.CreateOrUpdateAsync(category);
         return response switch
         {
             OkResult => RedirectToAction("Categories"),
-            ErrorResult error => Redirect($"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}"),
+            ErrorResult error => Redirect($"/ExtraPages/Error?message={System.Net.WebUtility.UrlEncode(error.Message + error.Exception)}"),
             _ => Redirect($"/ExtraPages/Error?message={500}")
         };
     }

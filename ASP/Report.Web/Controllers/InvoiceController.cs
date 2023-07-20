@@ -2,8 +2,8 @@
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using OkResult = Report.Core.ActionResults.OkResult;
+using Report.Domain.ActionResults;
+using OkResult = Report.Domain.ActionResults.OkResult;
 
 namespace Report.Web.Controllers;
 
@@ -100,7 +100,7 @@ public class InvoiceController : Controller
     [HttpPost]
     public async Task<IActionResult> Invoice(InvoiceRequestModel model)
     {
-        var response = await _restService.Invoice(model);
+        var response = await _restService.InvoiceAsync(model);
         return response switch
         {
             OkResult => RedirectToAction("Index"),

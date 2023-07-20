@@ -7,6 +7,7 @@ public class RestProductResponseModel
         Sum = Quantity * PriceUsd;
     }
 
+    public int Id { get; set; }
     public int Quantity { get; set; } = 0;
     public decimal PriceUsd { get; set; } = 0;
     public decimal PriceTjs { get; set; } = 0;

@@ -1,13 +1,185 @@
-﻿@model Report.Application.RequestModels.MoveRequestModel
+﻿@using Report.Application.ResponseModels
+@model List<Report.Application.RequestModels.MoveRequestModel>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Перемещение";
     Layout = "_Layout";
 }
-
-<div class="text-center">
-    @for (int i = 0; i < 101; i++)
-    {
-        <br>@i
-    }
+<style>
+        .table-wrapper-scroll-y {
+            display: block;
+            overflow-y: auto;
+            height: calc(100vh - 200px);
+        }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12">
+                    <select class="form-select">
+                        @if (ViewBag.Storages != null)
+                        {
+                            var storages = (List<StorageResponseModel>)ViewBag.Storages;
+                            foreach (var storage in storages)
+                            {
+                                <option onclick="FromStorageClick(@storage.Id)">@storage.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-12 mt-2">
+                    <div class="table-wrapper-scroll-y">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Продукт</th>
+                                <th>Количество</th>
+                                <th>Цена(доллар)</th>
+                            </tr>
+                            </thead>
+                            <tbody id="FromStorageRests">
+                            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-12 mt-2">
+                    <label id="SelectedProductName"></label>
+                    <div class="row">
+                        <div class="col">
+                            <input type="number" id="Quantity" placeholder="Количество"/>
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-outline-secondary" onclick="Move();">></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12">
+                    <select class="form-select" id="ToStorage">
+                        @if (ViewBag.Storages != null)
+                        {
+                            var storages = (List<StorageResponseModel>)ViewBag.Storages;
+                            foreach (var storage in storages)
+                            {
+                                <option value="@storage.Id">@storage.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-12 mt-2">
+                    <div class="table-wrapper-scroll-y">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Продукт</th>
+                                <th>Количество</th>
+                                <th>Склад</th>
+                            </tr>
+                            </thead>
+                            <tbody id="MovedRests">
+                            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-12 mt-2">
+                    <div class="row">
+                        <form method="post" asp-action="SubmitMove" id="MovedProductsForm">
+                            <button type="submit" class="btn btn-success">Завершить перемещение</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+let _selectedRestId=0;
+let _selectedProductName='';
+let _movingIndex=0;
+    function RestClick(restId, productName)
+    {
+        _selectedRestId = restId;
+        _selectedProductName=productName;
+        document.getElementById('SelectedProductName').textContent = "Выбран продукт " + productName;
+    }
+    
+    function Move()
+    {
+        if (_selectedRestId===0)
+        {
+            alert("Вы не выбрали продукт")
+        }
+        else
+        {
+            let tbody = document.getElementById('MovedRests');
+            let form = document.getElementById('MovedProductsForm');
+            let quantity=document.getElementById('Quantity').value;
+            let toStorage=document.getElementById('ToStorage');
+            if (quantity<1)
+            {
+                alert("Количество не должно быть ниже единицы");
+            }
+            else
+            {
+                if (toStorage.selectedIndex===-1)
+                {
+                    alert("Выберите склад");
+                }
+                else
+                {
+                    let toStorageSelectedOption=toStorage.options[toStorage.selectedIndex];
+                    let newRow = tbody.insertRow();
+                    newRow.innerHTML="<tr><td>"+_selectedProductName+"</td><td>"+quantity+"</td><td>"+toStorageSelectedOption.textContent+"</td></tr>";
+                    
+                    let restId=document.createElement('input');
+                    restId.name="["+_movingIndex+"].FromRestId";
+                    restId.type='hidden';
+                    restId.value=_selectedRestId;
+                    form.appendChild(restId);
+                    
+                    let quantityInput=document.createElement('input');
+                    quantityInput.name="["+_movingIndex+"].Quantity";
+                    quantityInput.type='hidden';
+                    quantityInput.value=quantity.toString();
+                    form.appendChild(quantityInput);
+                    
+                    let toStorageId=document.createElement('input');
+                    toStorageId.name="["+_movingIndex+"].ToStorageId";
+                    toStorageId.type='hidden';
+                    toStorageId.value=toStorageSelectedOption.value;
+                    console.log(toStorageSelectedOption);
+                    console.log(toStorageSelectedOption.value)
+                    form.appendChild(toStorageId);
+                    _movingIndex++;
+                    reset();
+                }
+            }
+        }
+    }
+    
+    function reset(){
+        _selectedRestId=0;
+        _selectedProductName="";
+        document.getElementById('SelectedProductName').textContent="";
+        }
+    function FromStorageClick(storageId){
+        $.ajax({
+            type: "POST",              
+            url: "/Move/GetStorageRests",        
+            data: { 
+              storageId:storageId
+            },
+            datatype: "html",
+                success: function (data) {
+                document.getElementById('FromStorageRests').innerHTML='';
+                $('#FromStorageRests').html(data);
+            }
+        });
+    }
+</script>

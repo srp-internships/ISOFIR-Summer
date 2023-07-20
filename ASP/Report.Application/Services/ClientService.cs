@@ -3,8 +3,8 @@ using Report.Application.Common.Interfaces.Repositories;
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using Report.Core.Models;
+using Report.Domain.ActionResults;
+using Report.Domain.Models;
 
 namespace Report.Application.Services;
 
@@ -19,7 +19,7 @@ public class ClientService : IClientService
         _mapper = mapper;
     }
 
-    public async Task<Result> CreateOrUpdate(ClientRequestModel clientDto)
+    public async Task<Result> CreateOrUpdateAsync(ClientRequestModel clientDto)
     {
         try
         {
@@ -36,10 +36,10 @@ public class ClientService : IClientService
             }
             else
             {
-                _clientRepository.Add(client);
+                await _clientRepository.AddAsync(client);
             }
 
-            _clientRepository.SaveChanges();
+            await _clientRepository.SaveChangesAsync();
             return new OkResult();
         }
         catch (Exception e)
@@ -48,16 +48,16 @@ public class ClientService : IClientService
         }
     }
 
-    public Result Remove(int id)
+    public async Task<Result> RemoveAsync(int id)
     {
         try
         {
-            _clientRepository.Remove(id);
+            await _clientRepository.RemoveAsync(id);
             return new OkResult();
         }
         catch (Exception e)
         {
-            return new ErrorResult(e, "Не возможно удалить несуществующий обект");
+            return new ErrorResult(e, "Не возможно удалить несуществующий объект");
         }
     }
 

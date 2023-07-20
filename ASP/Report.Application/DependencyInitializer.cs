@@ -11,7 +11,12 @@ public static class DependencyInitializer
     public static void AddApplication(this IServiceCollection services)
     {
         services.AddAutoMapper(typeof(AutoMapperConfigurations).Assembly);
-        
+
+        services.AddScoped<IReasonService, ReasonService>();
+        services.AddScoped<IReasonCashBoxService, ReasonCashBoxService>();
+        services.AddScoped<ICashBoxService, CashBoxService>();
+        services.AddScoped<IClientCashBoxService, ClientCashBoxService>();
+        services.AddScoped<IReasonCashBoxService, ReasonCashBoxService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<IFirmService, FirmService>();

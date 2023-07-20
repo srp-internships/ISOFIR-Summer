@@ -14,7 +14,8 @@
         <th scope="col">#</th>
         <th scope="col">Имя</th>
         <th scope="col">Телефон</th>
-        <th scope="col">Счёт(сомони)</th>
+        <th scope="col">Счёт(Tjs)</th>
+        <th scope="col">Счёт(Usd)</th>
         <th scope="col">За покупки</th>
         <th scope="col">Доход</th>
     </tr>
@@ -34,6 +35,7 @@
                 <td>@(clients[i].Name)</td>
                 <td>@(clients[i].Phone)</td>
                 <td>@(clients[i].CashTjs)</td>
+                <td>@(clients[i].CashUsd)</td>
                 <td>@(clients[i].Sales)</td>
                 <td>@(clients[i].Income)</td>
             </tr>
@@ -47,7 +49,7 @@
     <div class="modal-dialog modal-dialog-centered  modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-center" id="modalCenterTitle">Категории</h5>
+                <h5 class="modal-title text-center" id="modalCenterTitle">Клиент</h5>
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="modal"

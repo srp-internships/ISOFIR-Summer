@@ -1,4 +1,4 @@
-﻿namespace Report.Core.Models;
+﻿namespace Report.Domain.Models;
 
 public class RestProduct:BaseModel
 {

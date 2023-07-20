@@ -2,8 +2,8 @@
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using OkResult = Report.Core.ActionResults.OkResult;
+using Report.Domain.ActionResults;
+using OkResult = Report.Domain.ActionResults.OkResult;
 
 namespace Report.Web.Controllers;
 
@@ -36,7 +36,7 @@ public class FirmController : Controller
 
     public async Task<IActionResult> AddFirm(FirmRequestModel model)
     {
-        var response = await _firmService.CreateOrUpdate(model);
+        var response = await _firmService.CreateOrUpdateAsync(model);
         return response switch
         {
             OkResult => RedirectToAction("Index"),

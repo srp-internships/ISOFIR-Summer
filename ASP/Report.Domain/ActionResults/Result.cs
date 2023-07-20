@@ -1,4 +1,4 @@
-﻿namespace Report.Core.ActionResults;
+﻿namespace Report.Domain.ActionResults;
 
 public class Result
 {

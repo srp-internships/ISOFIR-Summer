@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Report.Application.Common.Interfaces.Repositories;
-using Report.Core.Models;
+using Report.Domain.Models;
 using Report.Infrastructure.Persistence.DataBase;
 
 namespace Report.Infrastructure.Persistence.Repositories;

@@ -2,8 +2,8 @@
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using OkResult = Report.Core.ActionResults.OkResult;
+using Report.Domain.ActionResults;
+using OkResult = Report.Domain.ActionResults.OkResult;
 
 namespace Report.Web.Controllers;
 
@@ -50,7 +50,7 @@ public class ProductController : Controller
     [HttpPost]
     public async Task<IActionResult> AddProduct(ProductRequestModel product)
     {
-        var response = await _productService.CreateOrUpdate(product);
+        var response = await _productService.CreateOrUpdateAsync(product);
         return response switch
         {
             OkResult => RedirectToAction("Index"),

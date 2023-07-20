@@ -3,8 +3,8 @@ using Report.Application.Common.Interfaces.Repositories;
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using Report.Core.Models;
+using Report.Domain.ActionResults;
+using Report.Domain.Models;
 
 namespace Report.Application.Services;
 
@@ -19,7 +19,7 @@ public class StorageService:IStorageService
         _mapper = mapper;
     }
 
-    public async Task<Result> CreateOrUpdate(StorageRequestModel storageDto)
+    public async Task<Result> CreateOrUpdateAsync(StorageRequestModel storageDto)
     {
         try
         {
@@ -36,10 +36,10 @@ public class StorageService:IStorageService
             }
             else
             {
-                _storageRepository.Add(storage);
+                await _storageRepository.AddAsync(storage);
             }
 
-            _storageRepository.SaveChanges();
+            await _storageRepository.SaveChangesAsync();
             return new OkResult();
         }
         catch (Exception e)
@@ -48,16 +48,16 @@ public class StorageService:IStorageService
         }
     }
 
-    public Result Remove(int id)
+    public async Task<Result> RemoveAsync(int id)
     {
         try
         {
-            _storageRepository.Remove(id);
+            await _storageRepository.RemoveAsync(id);
             return new OkResult();
         }
         catch (Exception e)
         {
-            return new ErrorResult(e,"Не возможно удалить несуществующий обект");
+            return new ErrorResult(e,"Не возможно удалить несуществующий объект");
         }
     }
 
@@ -67,6 +67,20 @@ public class StorageService:IStorageService
         {
             var result =  await _storageRepository.GetAllAsync();
             return new OkResult<List<StorageResponseModel>>(result.Select(s=>_mapper.Map<Storage,StorageResponseModel>(s)).ToList());
+        }
+        catch (Exception e)
+        {
+            return new ErrorResult(e);
+        }
+    }
+
+    public async Task<Result> GetStorageRestsAsync(int storageId)
+    {
+        try
+        {
+            var rests = await _storageRepository.GetStorageRestsAsync(storageId);
+            return new OkResult<List<RestProductResponseModel>>(rests
+                .Select(s => _mapper.Map<RestProduct, RestProductResponseModel>(s)).ToList());
         }
         catch (Exception e)
         {

@@ -2,8 +2,8 @@
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using OkResult = Report.Core.ActionResults.OkResult;
+using Report.Domain.ActionResults;
+using OkResult = Report.Domain.ActionResults.OkResult;
 
 namespace Report.Web.Controllers;
 
@@ -55,7 +55,7 @@ public class SaleController : Controller
     [HttpPost]
     public async Task<IActionResult> Sale(SaleRequestModel saleRequestModel)
     {
-        var response = await _restService.Sale(saleRequestModel);
+        var response = await _restService.SaleAsync(saleRequestModel);
         return response switch
         {
             OkResult => RedirectToAction("Index"),
@@ -69,7 +69,7 @@ public class SaleController : Controller
     public async Task<IActionResult> GetProductsByCategory(int categoryId)
     {
         
-        var productResult = await _restService.GetListOfRestProductsByCategory(categoryId);
+        var productResult = await _restService.GetListOfRestProductsByCategoryAsync(categoryId);
 
         switch (productResult)
         {
@@ -89,7 +89,7 @@ public class SaleController : Controller
     [HttpPost]
     public async Task<IActionResult> GetRestsByProduct(int productId)
     {
-        var productResult = await _restService.GetRestsByProduct(productId);
+        var productResult = await _restService.GetRestsByProductAsync(productId);
 
         switch (productResult)
         {

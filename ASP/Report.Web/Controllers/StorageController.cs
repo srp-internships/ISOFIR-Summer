@@ -3,8 +3,8 @@ using Report.Application.Common.Interfaces.Repositories;
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using OkResult = Report.Core.ActionResults.OkResult;
+using Report.Domain.ActionResults;
+using OkResult = Report.Domain.ActionResults.OkResult;
 
 namespace Report.Web.Controllers;
 
@@ -38,7 +38,7 @@ public class StorageController : Controller
     [HttpPost]
     public async Task<IActionResult> AddStorage(StorageRequestModel storage)
     {
-        var response = await _storageService.CreateOrUpdate(storage);
+        var response = await _storageService.CreateOrUpdateAsync(storage);
 
         return response switch
         {

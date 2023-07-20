@@ -1,12 +1,12 @@
 ﻿using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
+using Report.Domain.ActionResults;
 
 namespace Report.Application.Common.Interfaces.Services;
 
 public interface IProductService
 {
-    public Task<Result> CreateOrUpdate(ProductRequestModel productDto);
-    public Result Remove(int id);
+    public Task<Result> CreateOrUpdateAsync(ProductRequestModel productDto);
+    public Task<Result> RemoveAsync(int id);
     public Task<Result> GetAllAsync();
 }

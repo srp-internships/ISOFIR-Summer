@@ -1,0 +1,221 @@
+﻿@using Report.Application.ResponseModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Newtonsoft.Json
+@model Report.Application.RequestModels.ClientCashBoxRequestModel
+
+@{
+    ViewBag.Title = "Счёт клиента";
+    Layout = "_Layout";
+}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Название</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (ViewBag.History != null)
+    {
+        var histories = (List<ClientCashBoxResponseModel>)ViewBag.History;
+        for (var i = 0; i < histories.Count; i++)
+        {
+            var json = JsonConvert.SerializeObject(histories[i], new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            <tr onclick="onRecordClick('@json')">
+                <th scope="row">@(i + 1)</th>
+                <td>@(histories[i].ClientName)</td>
+                <td>@(histories[i].DateTime)</td>
+                <td>@(histories[i].CashBoxName)</td>
+                <td>@(histories[i].CashUsd)</td>
+                <td>@(histories[i].CashTjs)</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="WithDrawModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="modalCenterTitle1">Пополнить</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <form method="post" asp-action="WithDraw">
+                <div class="modal-body">
+                    @* <input type="hidden" asp-for="Id" id="Id"/> *@
+                    <div class="card-body">
+                        <div class="mt-2">
+                            <label class="form-label">Клиент</label>
+                            <select asp-for="ClientId" class="form-select">
+                                @if (ViewBag.Clients!=null)
+                                {
+                                    var clients = (List<ClientResponseModel>)ViewBag.Clients;
+                                    foreach (var client in clients)
+                                    {
+                                        <option value="@client.Id" onclick="ClientSelected('@client.Phone',@client.CashTjs,@client.Income,@client.CashUsd,@client.Sales)">@client.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <label class="form-label">Информация о клиенте</label>
+                            <div class="row" id="ClientInfo1"></div>
+                        </div>
+                        
+                        
+                        <div class="mt-2">
+                            <label class="form-label">Касса</label>
+                            <select asp-for="CashBoxId" class="form-select">
+                                @if (ViewBag.CashBoxes!=null)
+                                {
+                                    var cashBoxes = (List<CashBoxResponseModel>)ViewBag.CashBoxes;
+                                    foreach (var cashBox in cashBoxes)
+                                    {
+                                        <option value="@cashBox.Id" onclick="CashBoxSelected(@cashBox.CashTjs,@cashBox.CashUsd)">@cashBox.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <label class="form-label">Информация о кассе</label>
+                            <div class="row" id="CashBoxInfo"></div>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <label class="form-label">Сумма(доллар)</label>
+                            <input class="form-control" type="text" asp-for="CashUsd"/>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <label class="form-label">Сумма(сомони)</label>
+                            <input class="form-control" type="text" asp-for="CashTjs"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Сохранить Данные</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="PayModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="modalCenterTitle">Пополнить</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <form method="post" asp-action="Pay">
+                <div class="modal-body">
+                    @* <input type="hidden" asp-for="Id" id="Id"/> *@
+                    <div class="card-body">
+                        <div class="mt-2">
+                            <label class="form-label">Клиент</label>
+                            <select asp-for="ClientId" class="form-select">
+                                @if (ViewBag.Clients!=null)
+                                {
+                                    var clients = (List<ClientResponseModel>)ViewBag.Clients;
+                                    foreach (var client in clients)
+                                    {
+                                        <option value="@client.Id" onclick="ClientSelected('@client.Phone',@client.CashTjs,@client.Income,@client.CashUsd,@client.Sales)">@client.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <label class="form-label">Информация о клиенте</label>
+                            <div class="row" id="ClientInfo"></div>
+                        </div>
+                        
+                        
+                        <div class="mt-2">
+                            <label class="form-label">Касса</label>
+                            <select asp-for="CashBoxId" class="form-select">
+                                @if (ViewBag.CashBoxes!=null)
+                                {
+                                    var cashBoxes = (List<CashBoxResponseModel>)ViewBag.CashBoxes;
+                                    foreach (var cashBox in cashBoxes)
+                                    {
+                                        <option value="@cashBox.Id" onclick="CashBoxSelected(@cashBox.CashTjs,@cashBox.CashUsd)">@cashBox.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <label class="form-label">Информация о кассе</label>
+                            <div class="row" id="CashBoxInfo1"></div>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <label class="form-label">Сумма(доллар)</label>
+                            <input class="form-control" type="text" asp-for="CashUsd"/>
+                        </div>
+                        
+                        <div class="mt-2">
+                            <label class="form-label">Сумма(сомони)</label>
+                            <input class="form-control" type="text" asp-for="CashTjs"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Сохранить Данные</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" onclick="ShowModal('PayModal')">
+    Пополнить
+</button>
+<button type="button" class="btn btn-primary" onclick="ShowModal('WithDrawModal')">
+    Снять
+</button>
+
+<script type="text/javascript" src="/js/ModalViewer.js"></script>
+<script>
+    function ClientSelected(phone,cashTjs,income,cashUsd,sales)
+    {
+        document.getElementById("ClientInfo").innerHTML=
+            `<label>Телефон:${phone}</label><label>Имения(доллар):${cashUsd}</label><label>Имения(сомони):${cashTjs}</label><label>Доход:${income}</label><label>За всё время купил за:${sales}</label>`
+    document.getElementById("ClientInfo1").innerHTML=
+            `<label>Телефон:${phone}</label><label>Имения(доллар):${cashUsd}</label><label>Имения(сомони):${cashTjs}</label><label>Доход:${income}</label><label>За всё время купил за:${sales}</label>`
+    }
+    function CashBoxSelected(cashTjs,cashUsd)
+    {
+    document.getElementById("CashBoxInfo").innerHTML=
+        `<label>Имения доллар:${cashUsd}</label><label>Имения сомони:${cashTjs}</label>`;
+    document.getElementById("CashBoxInfo1").innerHTML=
+        `<label>Имения доллар:${cashUsd}</label><label>Имения сомони:${cashTjs}</label>`;
+    }
+</script>

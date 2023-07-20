@@ -2,7 +2,7 @@
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
+using Report.Domain.ActionResults;
 
 namespace Report.Web.Controllers;
 
@@ -66,7 +66,7 @@ public class RestController : Controller
     [HttpPost]
     public async Task<IActionResult> GetRestByFilter(RestFilterRequestModel filter)
     {
-        var clientsResult = await _restService.GetRestByFilter(filter);
+        var clientsResult = await _restService.GetRestByFilterAsync(filter);
 
         switch (clientsResult)
         {

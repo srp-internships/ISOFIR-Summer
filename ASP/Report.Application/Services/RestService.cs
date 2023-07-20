@@ -3,8 +3,8 @@ using Report.Application.Common.Interfaces.Repositories;
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
-using Report.Core.ActionResults;
-using Report.Core.Models;
+using Report.Domain.ActionResults;
+using Report.Domain.Models;
 
 namespace Report.Application.Services;
 
@@ -17,11 +17,12 @@ public class RestService : IRestService
     private readonly IInvoiceLogRepository _invoiceLogRepository;
     private readonly ISaleLogRepository _saleLogRepository;
     private readonly IProductRepository _productRepository;
+    private readonly IMoveProductLogRepository _moveProductLogRepository;
     private readonly IMapper _mapper;
 
     public RestService(IFirmRepository firmRepository, IClientRepository clientRepository,
         IRestProductRepository restProductRepository, IStorageRepository storageRepository,
-        IInvoiceLogRepository invoiceLogRepository, ISaleLogRepository saleLogRepository, IMapper mapper, IProductRepository productRepository)
+        IInvoiceLogRepository invoiceLogRepository, ISaleLogRepository saleLogRepository, IMapper mapper, IProductRepository productRepository, IMoveProductLogRepository moveProductLogRepository)
     {
         _firmRepository = firmRepository;
         _clientRepository = clientRepository;
@@ -31,9 +32,10 @@ public class RestService : IRestService
         _saleLogRepository = saleLogRepository;
         _mapper = mapper;
         _productRepository = productRepository;
+        _moveProductLogRepository = moveProductLogRepository;
     }
 
-    public async Task<Result> Invoice(InvoiceRequestModel log)
+    public async Task<Result> InvoiceAsync(InvoiceRequestModel log)
     {
         try
         {
@@ -53,17 +55,17 @@ public class RestService : IRestService
                     ProductId = log.ProductId,
                     StorageId = log.StorageId
                 };
-                _restProductRepository.Add(rest);
+                await _restProductRepository.AddAsync(rest);
             }
 
             rest.Quantity += log.Quantity;
 
-            _restProductRepository.SaveChanges();
+            await _restProductRepository.SaveChangesAsync();
 
             var invoiceLog = _mapper.Map<InvoiceRequestModel, InvoiceLog>(log);
             invoiceLog.RestProductId = rest.Id;
-            _invoiceLogRepository.Add(invoiceLog);
-            _invoiceLogRepository.SaveChanges();
+            await _invoiceLogRepository.AddAsync(invoiceLog);
+            await _invoiceLogRepository.SaveChangesAsync();
 
             return new OkResult();
         }
@@ -73,7 +75,7 @@ public class RestService : IRestService
         }
     }
 
-    public async Task<Result> Sale(SaleRequestModel log)
+    public async Task<Result> SaleAsync(SaleRequestModel log)
     {
         try
         {
@@ -89,15 +91,15 @@ public class RestService : IRestService
             client.Income += (log.SalePriceTjs - rest.InvoicePriceTjs) * log.Quantity;
             client.CashTjs -= log.SalePriceTjs * log.Quantity;
 
-            _restProductRepository.SaveChanges();
-            _clientRepository.SaveChanges();
+            await _restProductRepository.SaveChangesAsync();
+            await _clientRepository.SaveChangesAsync();
 
             var saleLog = _mapper.Map<SaleRequestModel, SaleLog>(log);
-            _saleLogRepository.Add(saleLog);
-            _saleLogRepository.SaveChanges();
+            await _saleLogRepository.AddAsync(saleLog);
+            await _saleLogRepository.SaveChangesAsync();
             
-            _restProductRepository.SaveChanges();
-            _clientRepository.SaveChanges();
+            await _restProductRepository.SaveChangesAsync();
+            await _clientRepository.SaveChangesAsync();
         }
         catch (Exception e)
         {
@@ -107,7 +109,7 @@ public class RestService : IRestService
         return new OkResult();
     }
 
-    public async Task<Result> GetListOfRestProductsByCategory(int categoryId)
+    public async Task<Result> GetListOfRestProductsByCategoryAsync(int categoryId)
     {
         try
         {
@@ -123,7 +125,7 @@ public class RestService : IRestService
         }
     }
 
-    public async Task<Result> GetRestsByProduct(int productId)
+    public async Task<Result> GetRestsByProductAsync(int productId)
     {
         try
         {
@@ -143,7 +145,7 @@ public class RestService : IRestService
         }
     }
 
-    public async Task<Result> GetRestByFilter(RestFilterRequestModel model)
+    public async Task<Result> GetRestByFilterAsync(RestFilterRequestModel model)
     {
         try
         {
@@ -157,5 +159,65 @@ public class RestService : IRestService
         {
             return new ErrorResult(e);
         }
+    }
+
+    public async Task<Result> MoveProductsAsync(List<MoveRequestModel> moveRequestModel)
+    {
+        try
+        {
+            foreach (var model in moveRequestModel)
+            {
+                var res = await MoveProductAsync(model);
+                if (res is ErrorResult)
+                {
+                    return res;
+                }
+            }
+
+            return new OkResult();
+        }
+        catch (Exception e)
+        {
+            return new ErrorResult(e);
+        }
+    }
+
+    private async Task<Result> MoveProductAsync(MoveRequestModel model)
+    {
+        if (model.Quantity<=0)
+            return new OkResult();
+        
+        var from = await _restProductRepository.GetByIdAsync(model.FromRestId);
+        if (from == null)
+            return new ErrorResult(new Exception(), "Не удаётся найти склад с которого вы хотите переместить продукты");
+
+
+        var storage = await _storageRepository.GetByIdAsync(model.ToStorageId);
+        if (storage == null)
+            return new ErrorResult(new Exception(), "Не удаётся найти склад в которого вы хотите переместить продукты");
+        
+        var to = await _storageRepository.GetRestByProductIdAsync(from,model.ToStorageId);
+
+        if (from.Quantity<model.Quantity)
+            return new ErrorResult(new Exception(), "Невозможно переместить такое количество продуктов");
+
+        from.Quantity -= model.Quantity;
+
+        to.Quantity += model.Quantity;
+
+        var moveProductLog = new MoveProductLog
+        {
+            FromStorageId = from.StorageId,
+            ToStorageId = model.ToStorageId,
+            ProductId = from.ProductId,
+            Quantity = model.Quantity,
+        };
+        
+        await _moveProductLogRepository.AddAsync(moveProductLog);
+
+        await _moveProductLogRepository.SaveChangesAsync();
+        await _storageRepository.SaveChangesAsync();
+        await _restProductRepository.SaveChangesAsync();
+        return new OkResult();
     }
 }

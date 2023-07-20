@@ -1,22 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Report.Core.Models;
+using Report.Domain.Models;
 
 namespace Report.Infrastructure.Persistence.DataBase;
 
 public class DataContext : DbContext
 {
-    public DataContext()
-    {
-        Firms = Set<Firm>();
-    }
+    // public DataContext()
+    // {
+        // Firms = Set<Firm>();
+    // }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySQL("server=localhost;user=root;database=reportNew");
+        optionsBuilder.UseMySQL("Persist Security Info=False;database=reportNew;server=localhost;port=3306;user id=root;Password=;");
         // optionsBuilder.UseSqlite("Data Source=C:/ProgramData/Report/MainDb.db");
         base.OnConfiguring(optionsBuilder);
     }
 
+    public DbSet<ClientCashLog> ClientCashLogs { get; set; }
+    public DbSet<ReasonCashLog> ReasonCashLogs { get; set; }
+    public DbSet<Reason> Reasons { get; set; }
+    public DbSet<MoveProductLog> MoveProductLogs { get; set; }
     public DbSet<Firm> Firms { get; set; }
     public DbSet<CashBox> CashBoxes { get; set; }
     public DbSet<Product> Products { get; set; }
@@ -29,7 +33,13 @@ public class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("BINARY");
+        // modelBuilder.UseCollation("BINARY");
+        
+        modelBuilder.Entity<MoveProductLog>().HasIndex(p => p.FromStorageId).IsUnique(false);
+        modelBuilder.Entity<MoveProductLog>().HasIndex(p => p.ToStorageId).IsUnique(false);
+        modelBuilder.Entity<MoveProductLog>().HasOne(p => p.FromStorage).WithMany(f => f.MoveProductsLogsFrom);
+        modelBuilder.Entity<MoveProductLog>().HasOne(p => p.ToStorage).WithMany(f => f.MoveProductsLogsTo);
         base.OnModelCreating(modelBuilder);
     }
+    
 }
