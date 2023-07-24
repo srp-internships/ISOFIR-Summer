@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
@@ -11,8 +12,10 @@ public class ProductController : Controller
 {
     private readonly IProductService _productService;
     private readonly ICategoryService _categoryService;
-    public ProductController(IProductService productService, ICategoryService categoryService)
+    private readonly string _wrPath;
+    public ProductController(IProductService productService, ICategoryService categoryService,IWebHostEnvironment environment)
     {
+        _wrPath = environment.WebRootPath;
         _productService = productService;
         _categoryService = categoryService;
     }
@@ -54,9 +57,29 @@ public class ProductController : Controller
         return response switch
         {
             OkResult => RedirectToAction("Index"),
-            ErrorResult error => Redirect($"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}"),
+            ErrorResult error => Redirect($"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}"),
             _ => Redirect($"/ExtraPages/Error?message={500}")
         };
     }
 
+    [HttpPost]
+    public async Task<IActionResult> LoadFromFile(IFormFile? file)
+    {
+        if (file!=null)
+        {
+            var path = _wrPath + "/" + Guid.NewGuid() + ".xlsx";
+            Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
+            await file.CopyToAsync(stream);
+            var response = await _productService.LoadFromExcelAsync(path,true);
+            return response switch
+            {
+                OkResult => RedirectToAction("Index"),
+                ErrorResult error => Redirect(
+                    $"/ExtraPages/Error?message={WebUtility.UrlEncode(error.Message + error.Exception)}"),
+                _ => Redirect($"/ExtraPages/Error?message={500}")
+            };
+        }
+
+        return RedirectToAction("Index");
+    }
 }

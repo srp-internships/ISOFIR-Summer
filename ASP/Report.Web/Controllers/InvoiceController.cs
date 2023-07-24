@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
 using Report.Application.ResponseModels;
@@ -15,9 +16,11 @@ public class InvoiceController : Controller
     private readonly IStorageService _storageService;
     private readonly IFirmService _firmService;
     private readonly IReportService _reportService;
+    private readonly string _wrPath;
 
-    public InvoiceController(IProductService productService, ICategoryService categoryService, IRestService restService, IStorageService storageService, IFirmService firmService, IReportService reportService)
+    public InvoiceController(IProductService productService, ICategoryService categoryService, IRestService restService, IStorageService storageService, IFirmService firmService, IReportService reportService,IWebHostEnvironment environment)
     {
+        _wrPath = environment.WebRootPath;
         _productService = productService;
         _categoryService = categoryService;
         _restService = restService;
@@ -108,4 +111,27 @@ public class InvoiceController : Controller
             _ => Redirect($"/ExtraPages/Error?message={500}")
         };
     }
+    
+    
+    [HttpPost]
+    public async Task<IActionResult> LoadFromFile(IFormFile? file)
+    {
+        if (file!=null)
+        {
+            var path = _wrPath + "/" + Guid.NewGuid() + ".xlsx";
+            Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
+            await file.CopyToAsync(stream);
+            var response = await _restService.InvoiceFromFileAsync(path,true);
+            return response switch
+            {
+                OkResult => RedirectToAction("Index"),
+                ErrorResult error => Redirect(
+                    $"/ExtraPages/Error?message={WebUtility.UrlEncode(error.Message + error.Exception)}"),
+                _ => Redirect($"/ExtraPages/Error?message={500}")
+            };
+        }
+
+        return RedirectToAction("Index");
+    }
+    
 }

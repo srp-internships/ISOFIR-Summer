@@ -35,4 +35,11 @@ public class StorageRepository:Repository<Storage>,IStorageRepository
         var storage = await Context.Storages.Include(s => s.RestProducts).ThenInclude(p=>p.Product).FirstOrDefaultAsync(s => s.Id == storageId);
         return storage is { RestProducts: not null } ? storage.RestProducts.ToList() : new List<RestProduct>();
     }
+
+    public async Task<int?> GetIdByNameAsync(string name)
+    {
+        
+        var res = await Context.Storages.FirstOrDefaultAsync(s=>s.Name.ToLower().Trim()==name.Trim().ToLower());
+        return res?.Id;
+    }
 }

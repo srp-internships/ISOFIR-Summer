@@ -47,7 +47,7 @@
                         aria-label="Close">
                 </button>
             </div>
-            <form method="post" asp-action="AddProduct">
+            <form method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <input type="hidden" asp-for="Id"/>
                     <div class="card-body">
@@ -56,24 +56,30 @@
                             <input type="text" class="form-control" aria-describedby="defaultFormControlHelp" asp-for="Name">
                         </div>
                         <div class="mt-2">
-                            <select asp-for="CategoryId">
+                            <label class="form-label">Категория</label>
+                            <select asp-for="CategoryId" class="form-select">
                                 @if (ViewBag.Categories != null)
                                 {
                                     var categories = (List<CategoryResponseModel>)ViewBag.Categories;
                                     foreach (var category in categories)
                                     {
-                                        <option value="@(category.Id)">@(category.Name)</option>                                        
+                                        <option value="@(category.Id)">@(category.Name)</option>
                                     }
                                 }
                             </select>
                         </div>
+                        <div class="mt-2">
+                            <label class="form-label">Загрузка с файла</label>
+                            <input type="file" class="form-control" aria-describedby="defaultFormControlHelp" name="file">
+                            <button type="submit" class="btn btn-primary" asp-action="LoadFromFile">Загрузить с файла</button>
                         </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         Close
                     </button>
-                    <button type="submit" class="btn btn-primary">Сохранить Данные</button>
+                    <button type="submit" class="btn btn-primary" asp-action="AddProduct">Сохранить Данные</button>
                 </div>
             </form>
         </div>

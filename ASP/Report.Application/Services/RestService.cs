@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using OfficeOpenXml;
 using Report.Application.Common.Interfaces.Repositories;
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.RequestModels;
@@ -174,6 +175,76 @@ public class RestService : IRestService
                 }
             }
 
+            return new OkResult();
+        }
+        catch (Exception e)
+        {
+            return new ErrorResult(e);
+        }
+    }
+
+    public async Task<Result> InvoiceFromFileAsync(string path, bool isReplaceMode)
+    {
+        try
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var pack = new ExcelPackage(path);
+            var sheet = pack.Workbook.Worksheets.First();
+            int i = 1;
+            while (sheet.Cells["B"+i].Value+""!="")
+            {
+                var log = new InvoiceRequestModel();
+                if (int.TryParse(sheet.Cells["C" + i].Value + "", out var restQuantity))
+                    return new ErrorResult(new Exception(), $"Недопустимое количество строка = {i}");
+
+                if (DateTime.TryParse(sheet.Cells["G" + i].Value + "", out var restDate))
+                    return new ErrorResult(new Exception(), $"Недопустимая дата строка = {i}");
+                
+                if (decimal.TryParse(sheet.Cells["D" + i].Value + "", out var restPrice))
+                    return new ErrorResult(new Exception(), $"Недопустимая цена строка = {i}");
+                
+                var firmId =await _firmRepository.GetIdByNameAsync(sheet.Cells["F" + i].Value + "");
+                if (firmId==null)
+                    return new ErrorResult(new Exception(), $"Фирма не действительна строка = {i}");
+            
+                var storageId =await _storageRepository.GetIdByNameAsync(sheet.Cells["E" + i].Value + "");
+                if (storageId==null)
+                    return new ErrorResult(new Exception(), $"Склад не действительна строка = {i}");
+                
+                var productId =await _productRepository.GetIdByNameAsync(sheet.Cells["E" + i].Value + "");
+                if (productId==null)
+                    return new ErrorResult(new Exception(), $"Склад не действительна строка = {i}");
+                
+                log.Quantity = restQuantity;
+                log.DateTime = restDate;
+                log.PriceUsd = restPrice;
+                log.FirmId = (int)firmId;
+                log.StorageId = (int)storageId;
+                log.ProductId = (int)productId;
+
+                var rest = await _restProductRepository.GetByIdAsync(log.ProductId);
+                if (rest == null)
+                {
+                    rest = new RestProduct
+                    {
+                        ProductId = log.ProductId,
+                        StorageId = log.StorageId
+                    };
+                    await _restProductRepository.AddAsync(rest);
+                }
+
+                rest.Quantity += restQuantity;
+
+                await _restProductRepository.SaveChangesAsync();
+
+                var invoiceLog = _mapper.Map<InvoiceRequestModel, InvoiceLog>(log);
+                invoiceLog.RestProductId = rest.Id;
+                await _invoiceLogRepository.AddAsync(invoiceLog);
+                
+                i++;
+            }
+
+            await _restProductRepository.SaveChangesAsync();
             return new OkResult();
         }
         catch (Exception e)

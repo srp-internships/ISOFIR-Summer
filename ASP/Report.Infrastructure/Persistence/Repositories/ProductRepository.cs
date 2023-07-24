@@ -15,4 +15,10 @@ public class ProductRepository:Repository<Product>, IProductRepository
     {
         return Set.Include(s => s.Category).ToListAsync();
     }
+
+    public async Task<int?> GetIdByNameAsync(string name)
+    {
+        var res = await Context.Products.FirstOrDefaultAsync(s=>s.Name.ToLower().Trim()==name.Trim().ToLower());
+        return res?.Id;
+    }
 }

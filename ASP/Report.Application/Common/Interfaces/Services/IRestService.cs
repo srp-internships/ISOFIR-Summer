@@ -12,5 +12,6 @@ public interface IRestService
 
     public Task<Result> GetRestByFilterAsync(RestFilterRequestModel model);
     public Task<Result> MoveProductsAsync(List<MoveRequestModel> moveRequestModel);
+    public Task<Result> InvoiceFromFileAsync(string path, bool isReplaceMode);
 
 }
