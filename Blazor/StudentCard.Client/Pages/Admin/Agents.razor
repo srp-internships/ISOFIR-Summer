@@ -1,0 +1,22 @@
+﻿@page "/Agents"
+@using StudentCard.Domain.Models
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>UserName</th>
+        <th>Role</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var agent in _agents)
+    {
+        <tr>
+            <td>@agent.Id</td>
+            <td>@agent.UserName</td>
+            <td>@agent.Role</td>
+        </tr>
+    }
+    </tbody>
+</table>

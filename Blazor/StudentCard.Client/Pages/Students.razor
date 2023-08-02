@@ -1,0 +1,34 @@
+﻿@page "/Students"
+<PageTitle>Students</PageTitle>
+<div class="container-fluid overflow-auto"> 
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>FullName</th>
+            <th>SpecialtyCode</th>
+            <th>Department</th>
+            <th>Course</th>
+            <th>Group</th>
+            <th>Dept</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (_students != null)
+        {
+            foreach (var student in _students)
+            {
+                <tr>
+                    <td>@student.Id</td>
+                    <td>@student.FullName</td>
+                    <td>@student.SpecialtyCode</td>
+                    <td>@student.Department</td>
+                    <td>@student.Course</td>
+                    <td>@student.Group</td>
+                    <td>@student.Dept</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,67 @@
+﻿@using StudentCard.Domain
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">StudentCard</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        @{
+            if (_agent!=null)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="students">
+                        <span class="oi oi-plus" aria-hidden="true"></span>Students 
+                    </NavLink>
+                </div>
+                
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Pays">
+                        <span class="oi oi-plus" aria-hidden="true"></span>Pays 
+                    </NavLink>
+                </div>
+                if (_agent.Role==Roles.Admin)
+                {
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="Agents">
+                            <span class="oi oi-plus" aria-hidden="true"></span>Agents
+                        </NavLink>
+                    </div>
+                    
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="CreateStudent">
+                            <span class="oi oi-plus" aria-hidden="true"></span>Create a student
+                        </NavLink>
+                    </div>
+                    
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="CreateAgent">
+                            <span class="oi oi-plus" aria-hidden="true"></span>Create a agent
+                        </NavLink>
+                    </div>
+                }
+                else
+                {
+                    @* <div class="nav-item px-3"> *@
+                        @* <NavLink class="nav-link" href="counter"> *@
+                            @* <span class="oi oi-plus" aria-hidden="true"></span> *@
+                        // </NavLink>
+                    // </div>
+                }
+                
+            }
+            else
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Login">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Login
+                    </NavLink>
+                </div>
+            }
+        }
+    </nav>
+</div>

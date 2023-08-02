@@ -1,0 +1,8 @@
+﻿@page "/Error/{_message}"
+
+<h3>Error</h3>
+<p>@_message</p>
+
+@code {
+    [Parameter]public string? _message { get;set; }
+}
