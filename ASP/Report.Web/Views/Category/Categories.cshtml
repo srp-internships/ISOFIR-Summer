@@ -1,11 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Newtonsoft.Json
-@using Report.Application.RequestModels
-@using Report.Application.ResponseModels
-@model Report.Application.RequestModels.CategoryRequestModel
+@model CategoryRequestModel
 @{
     ViewBag.Title = "Категории продуктов";
-    Layout = "_Layout";
 }
 
 <table class="table">
@@ -48,6 +45,8 @@
             </div>
             <form method="post" asp-action="AddCategory">
                 <div class="modal-body">
+                    <input type="hidden" asp-for="UserId" value="@User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value"/>
+
                     <input type="hidden" asp-for="Id" id="Id"/>
                     <div class="card-body">
                         <div class="mt-2">

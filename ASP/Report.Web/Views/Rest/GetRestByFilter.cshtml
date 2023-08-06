@@ -1,7 +1,5 @@
-﻿@using Report.Application.ResponseModels
-
-@{
-    Layout =null;
+﻿@{
+    Layout = null;
 }
 
 <table class="table">
@@ -16,21 +14,21 @@
     </tr>
     </thead>
     <tbody>
-        @if (ViewBag.Rests != null)
+    @if (ViewBag.Rests != null)
+    {
+        var rests = (List<RestProductResponseModel>)ViewBag.Rests;
+        foreach (var rest in rests)
         {
-            var rests = (List<RestProductResponseModel>)ViewBag.Rests;
-            foreach (var rest in rests)
-            {
-                <tr>
-                    <td>@rest.ProductName</td>
-                    <td>@rest.Quantity</td>
-                    <td>@rest.PriceUsd</td>
-                    <td>@rest.Sum</td>
-                    <td>@rest.StorageName</td>
-                    <td>@rest.FirmName</td>
-                </tr>
-            }
+            <tr>
+                <td>@rest.ProductName</td>
+                <td>@rest.Quantity</td>
+                <td>@rest.PriceUsd</td>
+                <td>@rest.Sum</td>
+                <td>@rest.StorageName</td>
+                <td>@rest.FirmName</td>
+            </tr>
         }
+    }
     </tbody>
 
 </table>

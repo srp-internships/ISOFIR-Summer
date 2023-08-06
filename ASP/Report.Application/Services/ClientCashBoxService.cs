@@ -8,14 +8,15 @@ using Report.Domain.Models;
 
 namespace Report.Application.Services;
 
-public class ClientCashBoxService:IClientCashBoxService
+public class ClientCashBoxService : IClientCashBoxService
 {
-    private readonly IClientCashLogRepository _clientCashLogRepository;
     private readonly ICashBoxRepository _cashBoxRepository;
-    private readonly IMapper _mapper;
+    private readonly IClientCashLogRepository _clientCashLogRepository;
     private readonly IClientRepository _clientRepository;
+    private readonly IMapper _mapper;
 
-    public ClientCashBoxService(IMapper mapper, IClientCashLogRepository clientCashLogRepository, ICashBoxRepository cashBoxRepository, IClientRepository clientRepository)
+    public ClientCashBoxService(IMapper mapper, IClientCashLogRepository clientCashLogRepository,
+        ICashBoxRepository cashBoxRepository, IClientRepository clientRepository)
     {
         _mapper = mapper;
         _clientCashLogRepository = clientCashLogRepository;
@@ -55,11 +56,11 @@ public class ClientCashBoxService:IClientCashBoxService
         }
     }
 
-    public async Task<Result> GetAllHistoryAsync()
+    public async Task<Result> GetAllHistoryAsync(int userId)
     {
         try
         {
-            var all = await _clientCashLogRepository.GetAllAsync();
+            var all = await _clientCashLogRepository.GetAllAsync(userId);
             return new OkResult<List<ClientCashBoxResponseModel>>(all
                 .Select(s => _mapper.Map<ClientCashLog, ClientCashBoxResponseModel>(s)).ToList());
         }

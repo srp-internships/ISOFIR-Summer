@@ -2,7 +2,7 @@
 
 namespace Report.Application.ResponseModels;
 
-public class ClientCashBoxResponseModel:BaseNetWorth
+public class ClientCashBoxResponseModel : BaseEntitiesNetWorth
 {
     public string DateTime { get; set; } = "";
     public string ClientName { get; set; } = "";

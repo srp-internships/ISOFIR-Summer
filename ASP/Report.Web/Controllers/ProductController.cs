@@ -1,19 +1,14 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
-using Report.Application.Common.Interfaces.Services;
-using Report.Application.RequestModels;
-using Report.Application.ResponseModels;
-using Report.Domain.ActionResults;
-using OkResult = Report.Domain.ActionResults.OkResult;
+﻿namespace Report.Web.Controllers;
 
-namespace Report.Web.Controllers;
-
+[Authorize]
 public class ProductController : Controller
 {
-    private readonly IProductService _productService;
     private readonly ICategoryService _categoryService;
+    private readonly IProductService _productService;
     private readonly string _wrPath;
-    public ProductController(IProductService productService, ICategoryService categoryService,IWebHostEnvironment environment)
+
+    public ProductController(IProductService productService, ICategoryService categoryService,
+        IWebHostEnvironment environment)
     {
         _wrPath = environment.WebRootPath;
         _productService = productService;
@@ -23,33 +18,38 @@ public class ProductController : Controller
     [Route("/Dashboard/Products")]
     public async Task<IActionResult> Index()
     {
-        var productsResult = await _productService.GetAllAsync();
+        var userId = int.Parse(HttpContext.User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+
+        var productsResult = await _productService.GetAllAsync(userId);
         switch (productsResult)
         {
             case OkResult<List<ProductResponseModel>> products:
                 ViewBag.Products = products.Result;
                 break;
             case ErrorResult error:
-                return Redirect($"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}");
+                return Redirect(
+                    $"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}");
             default:
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
 
-        var categoriesResult = await _categoryService.GetAllAsync();
-        
+        var categoriesResult = await _categoryService.GetAllAsync(userId);
+
         switch (categoriesResult)
         {
             case OkResult<List<CategoryResponseModel>> categories:
                 ViewBag.Categories = categories.Result;
                 break;
             case ErrorResult error:
-                return Redirect($"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}");
+                return Redirect(
+                    $"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}");
             default:
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
+
         return View();
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> AddProduct(ProductRequestModel product)
     {
@@ -57,7 +57,8 @@ public class ProductController : Controller
         return response switch
         {
             OkResult => RedirectToAction("Index"),
-            ErrorResult error => Redirect($"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}"),
+            ErrorResult error => Redirect(
+                $"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}"),
             _ => Redirect($"/ExtraPages/Error?message={500}")
         };
     }
@@ -65,12 +66,12 @@ public class ProductController : Controller
     [HttpPost]
     public async Task<IActionResult> LoadFromFile(IFormFile? file)
     {
-        if (file!=null)
+        if (file != null)
         {
             var path = _wrPath + "/" + Guid.NewGuid() + ".xlsx";
             Stream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
             await file.CopyToAsync(stream);
-            var response = await _productService.LoadFromExcelAsync(path,true);
+            var response = await _productService.LoadFromExcelAsync(path, true);
             return response switch
             {
                 OkResult => RedirectToAction("Index"),

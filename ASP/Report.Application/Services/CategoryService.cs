@@ -26,10 +26,10 @@ public class CategoryService : ICategoryService
             var category = _mapper.Map<CategoryRequestModel, Category>(categoryDto);
             if (category == null)
                 return new ErrorResult(new Exception(), "Невозможно обработать ваши данные");
-            
+
 
             var old = await _categoryRepository.GetByIdAsync(category.Id);
-            if (old!=null)
+            if (old != null)
                 old.Name = category.Name;
             else
                 await _categoryRepository.AddAsync(category);
@@ -56,11 +56,11 @@ public class CategoryService : ICategoryService
         }
     }
 
-    public async Task<Result> GetAllAsync()
+    public async Task<Result> GetAllAsync(int userId)
     {
         try
         {
-            var result = await _categoryRepository.GetAllAsync();
+            var result = await _categoryRepository.GetAllAsync(userId);
             return new OkResult<List<CategoryResponseModel>>(result
                 .Select(s => _mapper.Map<Category, CategoryResponseModel>(s)).ToList());
         }

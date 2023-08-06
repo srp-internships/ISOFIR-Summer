@@ -1,9 +1,9 @@
 ﻿namespace Report.Application.RequestModels;
 
-public class InvoiceRequestModel
+public class InvoiceRequestModel : BaseRequestModel
 {
     public int FirmId { get; set; }
-    public DateTime DateTime { get; set; }=DateTime.Now;
+    public DateTime DateTime { get; set; } = DateTime.Now;
     public int StorageId { get; set; }
     public int ProductId { get; set; }
     public decimal PriceUsd { get; set; }

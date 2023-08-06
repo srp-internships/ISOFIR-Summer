@@ -2,7 +2,7 @@
 
 namespace Report.Application.RequestModels;
 
-public class ClientCashBoxRequestModel:BaseNetWorth
+public class ClientCashBoxRequestModel : BaseEntitiesNetWorth
 {
     public int ClientId { get; set; }
     public DateTime Type { get; set; }

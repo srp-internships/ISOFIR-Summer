@@ -1,10 +1,8 @@
 ﻿@using Newtonsoft.Json
-@using Report.Application.ResponseModels
-@model Report.Application.RequestModels.CashBoxRequestModel
+@model CashBoxRequestModel
 
 @{
     ViewBag.Title = "Кассы";
-    Layout = "_Layout";
 }
 
 <table class="table">
@@ -51,7 +49,8 @@
             </div>
             <form method="post" asp-action="AddCashBox">
                 <div class="modal-body">
-                    <input type="hidden" asp-for="Id" id="Id"/>
+                    <input type="hidden" asp-for="Id"/>
+                    <input type="hidden" asp-for="UserId" value="@User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value"/>
                     <div class="card-body">
                         <div class="mt-2">
                             <label class="form-label">Имя</label>

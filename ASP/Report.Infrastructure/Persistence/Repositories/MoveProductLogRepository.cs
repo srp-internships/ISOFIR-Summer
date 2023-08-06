@@ -1,5 +1,4 @@
-﻿
-using Report.Application.Common.Interfaces.Repositories;
+﻿using Report.Application.Common.Interfaces.Repositories;
 using Report.Domain.Models;
 using Report.Infrastructure.Persistence.DataBase;
 

@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Report.Application.Common.Interfaces.Services;
-using Report.Application.RequestModels;
-using Report.Application.ResponseModels;
-using Report.Domain.ActionResults;
-using OkResult = Report.Domain.ActionResults.OkResult;
+﻿namespace Report.Web.Controllers;
 
-namespace Report.Web.Controllers;
-
+[Authorize]
 public class CategoryController : Controller
 {
     private readonly ICategoryService _categoryService;
+
     public CategoryController(ICategoryService categoryService)
     {
         _categoryService = categoryService;
@@ -18,19 +13,22 @@ public class CategoryController : Controller
     [Route("/Dashboard/Categories")]
     public async Task<IActionResult> Categories()
     {
-        var categoriesResult = await _categoryService.GetAllAsync();
-        
+        var userId = int.Parse(HttpContext.User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+
+        var categoriesResult = await _categoryService.GetAllAsync(userId);
+
         switch (categoriesResult)
         {
             case OkResult<List<CategoryResponseModel>> categories:
                 ViewBag.Categories = categories.Result;
                 break;
             case ErrorResult error:
-                return Redirect($"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}");
+                return Redirect(
+                    $"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}");
             default:
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
-            
+
         return View();
     }
 
@@ -41,7 +39,8 @@ public class CategoryController : Controller
         return response switch
         {
             OkResult => RedirectToAction("Categories"),
-            ErrorResult error => Redirect($"/ExtraPages/Error?message={System.Net.WebUtility.UrlEncode(error.Message + error.Exception)}"),
+            ErrorResult error => Redirect(
+                $"/ExtraPages/Error?message={WebUtility.UrlEncode(error.Message + error.Exception)}"),
             _ => Redirect($"/ExtraPages/Error?message={500}")
         };
     }

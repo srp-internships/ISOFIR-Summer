@@ -1,10 +1,10 @@
 ﻿namespace Report.Domain.Models;
 
-public class RestProduct:BaseModel
+public class RestProduct : BaseEntitiesModel
 {
     public int ProductId { get; set; }
     public Product? Product { get; set; }
-    
+
     public int StorageId { get; set; }
     public Storage? Storage { get; set; }
 

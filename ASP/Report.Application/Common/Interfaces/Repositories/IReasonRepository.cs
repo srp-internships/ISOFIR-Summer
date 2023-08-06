@@ -2,7 +2,6 @@
 
 namespace Report.Application.Common.Interfaces.Repositories;
 
-public interface IReasonRepository:IRepository<Reason>
+public interface IReasonRepository : IRepository<Reason>
 {
-    
 }

@@ -1,5 +1,4 @@
-﻿@using Report.Application.ResponseModels
-@{
+﻿@{
     Layout = null;
 }
 <table class="table">
@@ -16,7 +15,7 @@
         var products = (List<GetRestsByProductResponseModel>)ViewBag.RestProducts;
         foreach (var product in products)
         {
-            <tr onclick="RestSelected(@product.RestId)">
+            <tr class="RestTableTr" onclick="RestSelected(@product.RestId);this.style.backgroundColor='#94ff94'">
                 <td>@product.Quantity</td>
                 <td>@product.StorageName</td>
                 <td>@product.PriceTjs</td>

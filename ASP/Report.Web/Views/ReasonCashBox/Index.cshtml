@@ -1,11 +1,9 @@
-﻿@using Report.Application.ResponseModels
-@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Newtonsoft.Json
-@model Report.Application.RequestModels.ReasonCashBoxRequestModel
+@model ReasonCashBoxRequestModel
 
 @{
     ViewBag.Title = "Счёт клиента";
-    Layout = "_Layout";
 }
 
 <table class="table">
@@ -52,6 +50,8 @@
             </div>
             <form method="post" asp-action="WithDraw">
                 <div class="modal-body">
+                    <input type="hidden" asp-for="UserId" value="@User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value"/>
+
                     @* <input type="hidden" asp-for="Id" id="Id"/> *@
                     <div class="card-body">
                         <div class="mt-2">
@@ -67,17 +67,17 @@
                                 }
                             </select>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Информация о клиенте</label>
                             <div class="row" id="ClientInfo1"></div>
                         </div>
-                        
-                        
+
+
                         <div class="mt-2">
                             <label class="form-label">Касса</label>
                             <select asp-for="CashBoxId" class="form-select">
-                                @if (ViewBag.CashBoxes!=null)
+                                @if (ViewBag.CashBoxes != null)
                                 {
                                     var cashBoxes = (List<CashBoxResponseModel>)ViewBag.CashBoxes;
                                     foreach (var cashBox in cashBoxes)
@@ -87,17 +87,17 @@
                                 }
                             </select>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Информация о кассе</label>
                             <div class="row" id="CashBoxInfo"></div>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Сумма(доллар)</label>
                             <input class="form-control" type="text" asp-for="CashUsd"/>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Сумма(сомони)</label>
                             <input class="form-control" type="text" asp-for="CashTjs"/>
@@ -114,9 +114,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 
 <div class="modal fade" id="PayModal" aria-hidden="true">
@@ -152,12 +149,12 @@
                             <label class="form-label">Информация о клиенте</label>
                             <div class="row" id="ClientInfo"></div>
                         </div>
-                        
-                        
+
+
                         <div class="mt-2">
                             <label class="form-label">Касса</label>
                             <select asp-for="CashBoxId" class="form-select">
-                                @if (ViewBag.CashBoxes!=null)
+                                @if (ViewBag.CashBoxes != null)
                                 {
                                     var cashBoxes = (List<CashBoxResponseModel>)ViewBag.CashBoxes;
                                     foreach (var cashBox in cashBoxes)
@@ -167,17 +164,17 @@
                                 }
                             </select>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Информация о кассе</label>
                             <div class="row" id="CashBoxInfo1"></div>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Сумма(доллар)</label>
                             <input class="form-control" type="text" asp-for="CashUsd"/>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Сумма(сомони)</label>
                             <input class="form-control" type="text" asp-for="CashTjs"/>

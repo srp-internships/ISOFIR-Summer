@@ -1,13 +1,6 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
-using Report.Application.Common.Interfaces.Services;
-using Report.Application.RequestModels;
-using Report.Application.ResponseModels;
-using Report.Domain.ActionResults;
-using OkResult = Report.Domain.ActionResults.OkResult;
+﻿namespace Report.Web.Controllers;
 
-namespace Report.Web.Controllers;
-
+[Authorize]
 public class CashBoxController : Controller
 {
     private readonly ICashBoxService _cashBoxService;
@@ -19,7 +12,8 @@ public class CashBoxController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var cashBoxesResult = await _cashBoxService.GetAllAsync();
+        var userId = int.Parse(HttpContext.User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+        var cashBoxesResult = await _cashBoxService.GetAllAsync(userId);
 
         switch (cashBoxesResult)
         {
@@ -32,6 +26,7 @@ public class CashBoxController : Controller
             default:
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
+
         return View();
     }
 

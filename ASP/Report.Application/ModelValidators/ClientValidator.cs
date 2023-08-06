@@ -2,8 +2,4 @@
 
 public class ClientValidator
 {
-    public ClientValidator()
-    {
-        
-    }
 }

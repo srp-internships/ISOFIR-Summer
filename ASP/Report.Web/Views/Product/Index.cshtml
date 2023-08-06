@@ -1,10 +1,8 @@
-﻿@using Report.Application.ResponseModels
-@using Newtonsoft.Json
-@model Report.Application.RequestModels.ProductRequestModel
+﻿@using Newtonsoft.Json
+@model ProductRequestModel
 
 @{
     ViewBag.Title = "Продукты";
-    Layout = "_Layout";
 }
 
 <table class="table" xmlns="">
@@ -49,6 +47,8 @@
             </div>
             <form method="post" enctype="multipart/form-data">
                 <div class="modal-body">
+                    <input type="hidden" asp-for="UserId" value="@User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value"/>
+
                     <input type="hidden" asp-for="Id"/>
                     <div class="card-body">
                         <div class="mt-2">

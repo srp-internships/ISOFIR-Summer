@@ -8,5 +8,5 @@ public interface ICashBoxService
     public Task<Result> CreateOrUpdateAsync(CashBoxRequestModel cashBoxDto);
     public Task<Result> GetCashBoxCashAsync(int cashBoxId);
     public Task<Result> RemoveAsync(int id);
-    public Task<Result> GetAllAsync();
+    public Task<Result> GetAllAsync(int userId);
 }

@@ -7,5 +7,5 @@ public interface ICategoryService
 {
     public Task<Result> CreateOrUpdateAsync(CategoryRequestModel categoryDto);
     public Task<Result> RemoveAsync(int id);
-    public Task<Result> GetAllAsync();
+    public Task<Result> GetAllAsync(int userId);
 }

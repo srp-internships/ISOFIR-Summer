@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Report.Application.Common.Interfaces.Services;
-using Report.Application.RequestModels;
-using Report.Application.ResponseModels;
-using Report.Domain.ActionResults;
-using OkResult = Report.Domain.ActionResults.OkResult;
+﻿namespace Report.Web.Controllers;
 
-namespace Report.Web.Controllers;
-
+[Authorize]
 public class FirmController : Controller
 {
     private readonly IFirmService _firmService;
@@ -18,7 +12,9 @@ public class FirmController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var firmsResult = await _firmService.GetAllAsync();
+        var userId = int.Parse(HttpContext.User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+
+        var firmsResult = await _firmService.GetAllAsync(userId);
         switch (firmsResult)
         {
             case OkResult<List<FirmResponseModel>> firms:
@@ -26,7 +22,7 @@ public class FirmController : Controller
                 break;
             case ErrorResult error:
                 return Redirect(
-                    $"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}");
+                    $"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}");
             default:
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
@@ -40,7 +36,8 @@ public class FirmController : Controller
         return response switch
         {
             OkResult => RedirectToAction("Index"),
-            ErrorResult error => Redirect($"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}"),
+            ErrorResult error => Redirect(
+                $"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}"),
             _ => Redirect($"/ExtraPages/Error?message={500}")
         };
     }

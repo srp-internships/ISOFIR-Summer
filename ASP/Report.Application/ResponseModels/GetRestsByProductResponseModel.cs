@@ -1,5 +1,4 @@
-﻿
-namespace Report.Application.ResponseModels;
+﻿namespace Report.Application.ResponseModels;
 
 public class GetRestsByProductResponseModel
 {

@@ -1,20 +1,14 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
-using Report.Application.Common.Interfaces.Services;
-using Report.Application.RequestModels;
-using Report.Application.ResponseModels;
-using Report.Domain.ActionResults;
-using OkResult = Report.Domain.ActionResults.OkResult;
+﻿namespace Report.Web.Controllers;
 
-namespace Report.Web.Controllers;
-
+[Authorize]
 public class ReasonCashBoxController : Controller
 {
     private readonly ICashBoxService _cashBoxService;
     private readonly IReasonCashBoxService _reasonCashBoxService;
     private readonly IReasonService _reasonService;
 
-    public ReasonCashBoxController(ICashBoxService cashBoxService, IReasonCashBoxService reasonCashBoxService, IReasonService reasonService)
+    public ReasonCashBoxController(ICashBoxService cashBoxService, IReasonCashBoxService reasonCashBoxService,
+        IReasonService reasonService)
     {
         _cashBoxService = cashBoxService;
         _reasonCashBoxService = reasonCashBoxService;
@@ -23,7 +17,9 @@ public class ReasonCashBoxController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var cashBoxesResult = await _cashBoxService.GetAllAsync();
+        var userId = int.Parse(HttpContext.User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+
+        var cashBoxesResult = await _cashBoxService.GetAllAsync(userId);
 
         switch (cashBoxesResult)
         {
@@ -37,7 +33,7 @@ public class ReasonCashBoxController : Controller
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
 
-        var reasonHistoryResult = await _reasonCashBoxService.GetAllHistoryAsync();
+        var reasonHistoryResult = await _reasonCashBoxService.GetAllHistoryAsync(userId);
 
         switch (reasonHistoryResult)
         {
@@ -51,7 +47,7 @@ public class ReasonCashBoxController : Controller
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
 
-        var reasonsResult = await _reasonService.GetAllAsync();
+        var reasonsResult = await _reasonService.GetAllAsync(userId);
 
         switch (reasonsResult)
         {
@@ -64,7 +60,7 @@ public class ReasonCashBoxController : Controller
             default:
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
-        
+
         return View();
     }
 

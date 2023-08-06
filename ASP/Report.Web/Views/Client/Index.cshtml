@@ -1,10 +1,8 @@
 ﻿@using Newtonsoft.Json
-@using Report.Application.ResponseModels
-@model Report.Application.RequestModels.ClientRequestModel
+@model ClientRequestModel
 
 @{
     ViewBag.Title = "Клиенты";
-    Layout = "_Layout";
 }
 
 
@@ -58,6 +56,8 @@
             </div>
             <form method="post" asp-action="AddClient">
                 <div class="modal-body">
+                    <input type="hidden" asp-for="UserId" value="@User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value"/>
+
                     <input type="hidden" asp-for="Id"/>
                     <div class="card-body">
                         <div class="mt-2">
@@ -68,7 +68,7 @@
                             <label class="form-label">Телефон</label>
                             <input type="text" class="form-control" aria-describedby="defaultFormControlHelp" asp-for="Phone">
                         </div>
-                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">

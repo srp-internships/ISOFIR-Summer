@@ -9,7 +9,7 @@ public static class DependencyInitializer
 {
     public static void AddInfrastructure(this IServiceCollection services)
     {
-        services.AddScoped(typeof(IRepository<>),typeof(Repository<>));
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<ICashBoxRepository, CashBoxRepository>();
         services.AddScoped<IClientCashLogRepository, ClientCashLogRepository>();
         services.AddScoped<IReasonCashLogRepository, ReasonCashLogRepository>();
@@ -22,7 +22,9 @@ public static class DependencyInitializer
         services.AddScoped<IInvoiceLogRepository, InvoiceLogRepository>();
         services.AddScoped<ISaleLogRepository, SaleLogRepository>();
         services.AddScoped<IRestProductRepository, RestProductRepository>();
-        services.AddScoped<IMoveProductLogRepository,MoveProductLogRepository>();
+        services.AddScoped<IMoveProductLogRepository, MoveProductLogRepository>();
         services.AddScoped<DataContext>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRateRepository, RateRepository>();
     }
 }

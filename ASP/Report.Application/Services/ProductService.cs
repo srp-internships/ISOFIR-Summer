@@ -11,9 +11,9 @@ namespace Report.Application.Services;
 
 public class ProductService : IProductService
 {
-    private readonly IProductRepository _productRepository;
     private readonly ICategoryRepository _categoryRepository;
     private readonly IMapper _mapper;
+    private readonly IProductRepository _productRepository;
 
     public ProductService(IProductRepository productRepository, IMapper mapper, ICategoryRepository categoryRepository)
     {
@@ -27,10 +27,7 @@ public class ProductService : IProductService
         try
         {
             var product = _mapper.Map<ProductRequestModel, Product>(productDto);
-            if (product == null)
-            {
-                return new ErrorResult(new Exception(), "Невозможно обработать ваши данные");
-            }
+            if (product == null) return new ErrorResult(new Exception(), "Невозможно обработать ваши данные");
 
             var old = await _productRepository.GetByIdAsync(product.Id);
             if (old != null)
@@ -65,11 +62,11 @@ public class ProductService : IProductService
         }
     }
 
-    public async Task<Result> GetAllAsync()
+    public async Task<Result> GetAllAsync(int userId)
     {
         try
         {
-            var result = await _productRepository.GetAllAsync();
+            var result = await _productRepository.GetAllAsync(userId);
             return new OkResult<List<ProductResponseModel>>(result
                 .Select(s => _mapper.Map<Product, ProductResponseModel>(s)).ToList());
         }
@@ -87,12 +84,12 @@ public class ProductService : IProductService
             var book = new ExcelPackage(path);
             var sheet = book.Workbook.Worksheets.First();
             var i = 2;
-            while(sheet.Cells["B" + i].Value + ""!="")
+            while (sheet.Cells["B" + i].Value + "" != "")
             {
                 var category = await _categoryRepository.GetByNameAsync(sheet.Cells["C" + i].Value + "");
-                if (category==null)
+                if (category == null)
                     return new ErrorResult(new Exception(), $"Категория не найдена. Строка {i} >>> ");
-                
+
                 var product = new Product
                 {
                     Name = sheet.Cells["B" + i].Value + "",

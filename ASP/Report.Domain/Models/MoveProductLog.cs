@@ -1,6 +1,6 @@
 ﻿namespace Report.Domain.Models;
 
-public class MoveProductLog:BaseModel
+public class MoveProductLog : BaseEntitiesModel
 {
     public int FromStorageId { get; set; }
     public Storage? FromStorage { get; set; }

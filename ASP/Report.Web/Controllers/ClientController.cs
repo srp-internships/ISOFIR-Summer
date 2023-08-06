@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Report.Application.Common.Interfaces.Services;
-using Report.Application.RequestModels;
-using Report.Application.ResponseModels;
-using Report.Domain.ActionResults;
-using OkResult = Report.Domain.ActionResults.OkResult;
+﻿namespace Report.Web.Controllers;
 
-namespace Report.Web.Controllers;
-
+[Authorize]
 public class ClientController : Controller
 {
     private readonly IClientService _clientService;
@@ -18,15 +12,18 @@ public class ClientController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var clientsResult = await _clientService.GetAllAsync();
-        
+        var userId = int.Parse(HttpContext.User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+
+        var clientsResult = await _clientService.GetAllAsync(userId);
+
         switch (clientsResult)
         {
             case OkResult<List<ClientResponseModel>> clients:
                 ViewBag.Clients = clients.Result;
                 break;
             case ErrorResult error:
-                return Redirect($"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}");
+                return Redirect(
+                    $"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}");
             default:
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
@@ -36,12 +33,13 @@ public class ClientController : Controller
 
     public async Task<IActionResult> AddClient(ClientRequestModel client)
     {
-            var response = await _clientService.CreateOrUpdateAsync(client);
-            return response switch
-            {
-                OkResult => RedirectToAction("Index"),
-                ErrorResult error => Redirect($"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}"),
-                _ => Redirect($"/ExtraPages/Error?message={500}")
-            };
-        }
+        var response = await _clientService.CreateOrUpdateAsync(client);
+        return response switch
+        {
+            OkResult => RedirectToAction("Index"),
+            ErrorResult error => Redirect(
+                $"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}"),
+            _ => Redirect($"/ExtraPages/Error?message={500}")
+        };
+    }
 }

@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Товар</th>
+        <th>Количество</th>
+        <th>Сумма</th>
+        <th>USD</th>
+        <th>TJS</th>
+        <th>Склад</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (ViewBag.Rests != null)
+    {
+        var rests = (List<RestProductResponseModel>)ViewBag.Rests;
+        foreach (var rest in rests)
+        {
+            <tr>
+                <td>@rest.ProductName</td>
+                <td>@rest.Quantity</td>
+                <td>@rest.Sum</td>
+                <td>@rest.PriceUsd</td>
+                <td>@rest.PriceTjs</td>
+                <td>@rest.StorageName</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>

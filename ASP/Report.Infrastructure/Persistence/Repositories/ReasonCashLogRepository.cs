@@ -11,7 +11,7 @@ public class ReasonCashLogRepository : Repository<ReasonCashLog>, IReasonCashLog
     {
     }
 
-    public new Task<List<ReasonCashLog>> GetAllAsync()
+    public Task<List<ReasonCashLog>> GetAllAsync()
     {
         return Context.ReasonCashLogs.Include(s => s.Reason).Include(s => s.CashBox).ToListAsync();
     }

@@ -7,5 +7,5 @@ public interface IReasonCashBoxService
 {
     public Task<Result> PayWithDraw(ReasonCashBoxRequestModel clientCash);
 
-    Task<Result> GetAllHistoryAsync();
+    Task<Result> GetAllHistoryAsync(int userId);
 }

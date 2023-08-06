@@ -10,8 +10,8 @@ namespace Report.Application.Services;
 
 public class FirmService : IFirmService
 {
-    private readonly IMapper _mapper;
     private readonly IFirmRepository _firmRepository;
+    private readonly IMapper _mapper;
 
     public FirmService(IFirmRepository firmRepository, IMapper mapper)
     {
@@ -24,20 +24,13 @@ public class FirmService : IFirmService
         try
         {
             var firm = _mapper.Map<FirmRequestModel, Firm>(firmDto);
-            if (firm == null)
-            {
-                return new ErrorResult(new Exception(), "Невозможно обработать ваши данные");
-            }
+            if (firm == null) return new ErrorResult(new Exception(), "Невозможно обработать ваши данные");
 
             var old = await _firmRepository.GetByIdAsync(firm.Id);
             if (old != null)
-            {
                 old.Name = firm.Name;
-            }
             else
-            {
                 await _firmRepository.AddAsync(firm);
-            }
 
             await _firmRepository.SaveChangesAsync();
             return new OkResult();
@@ -61,11 +54,11 @@ public class FirmService : IFirmService
         }
     }
 
-    public async Task<Result> GetAllAsync()
+    public async Task<Result> GetAllAsync(int userId)
     {
         try
         {
-            var result = await _firmRepository.GetAllAsync();
+            var result = await _firmRepository.GetAllAsync(userId);
             return new OkResult<List<FirmResponseModel>>(result.Select(s => _mapper.Map<Firm, FirmResponseModel>(s))
                 .ToList());
         }

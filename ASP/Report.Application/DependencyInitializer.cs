@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Report.Application.Common.Interfaces.Services;
 using Report.Application.Mappers;
 using Report.Application.Services;
@@ -22,7 +21,10 @@ public static class DependencyInitializer
         services.AddScoped<IFirmService, FirmService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IReportService, ReportService>();
-        services.AddScoped<IStorageService,StorageService>();
+        services.AddScoped<IStorageService, StorageService>();
         services.AddScoped<IRestService, RestService>();
+        services.AddScoped<IRateService, RateService>();
+
+        services.AddScoped<IAuthService, AuthService>();
     }
 }

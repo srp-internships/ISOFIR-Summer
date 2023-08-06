@@ -1,9 +1,7 @@
-﻿@using Report.Application.ResponseModels
-@model List<Report.Application.RequestModels.MoveRequestModel>
+﻿@model List<MoveRequestModel>
 
 @{
     ViewBag.Title = "Перемещение";
-    Layout = "_Layout";
 }
 <style>
         .table-wrapper-scroll-y {
@@ -39,7 +37,7 @@
                             </tr>
                             </thead>
                             <tbody id="FromStorageRests">
-                            
+
                             </tbody>
                         </table>
                     </div>
@@ -82,7 +80,7 @@
                             </tr>
                             </thead>
                             <tbody id="MovedRests">
-                            
+
                             </tbody>
                         </table>
                     </div>

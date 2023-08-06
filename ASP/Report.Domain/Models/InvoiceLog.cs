@@ -1,6 +1,6 @@
 ﻿namespace Report.Domain.Models;
 
-public class InvoiceLog:BaseModel
+public class InvoiceLog : BaseEntitiesModel
 {
     public int RestProductId { get; set; }
     public RestProduct? RestProduct { get; set; }
@@ -10,9 +10,9 @@ public class InvoiceLog:BaseModel
 
     public decimal PriceUsd { get; set; }
     public decimal PriceTjs { get; set; }
-    
+
     public int Quantity { get; set; }
-    public DateTime DateTime { get; set; }=DateTime.Now;
+    public DateTime DateTime { get; set; } = DateTime.Now;
 
     public int ProductId { get; set; }
     public Product? Product { get; set; }

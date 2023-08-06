@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Время</th>
+        <th>Клиент</th>
+        <th>Склад</th>
+        <th>Продукт</th>
+        <th>Кол-во</th>
+        <th>Цена продажи(Tjs)</th>
+        <th>Цена продажи(Usd)</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    @if (ViewBag.ClientHistory != null)
+    {
+        var clientHistory = (List<SaleLogResponseModel>)ViewBag.ClientHistory;
+        foreach (var log in clientHistory)
+        {
+            <tr>
+                <td>@log.DateTime</td>
+                <td>@log.Client</td>
+                <td>@log.Storage</td>
+                <td>@log.Product</td>
+                <td>@log.Quantity</td>
+                <td>@log.SalePriceTjs</td>
+                <td>@log.SalePriceUsd</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>

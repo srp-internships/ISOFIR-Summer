@@ -2,5 +2,6 @@
 
 namespace Report.Application.Common.Interfaces.Repositories;
 
-public interface ICashBoxRepository:IRepository<CashBox>
-{ }
+public interface ICashBoxRepository : IRepository<CashBox>
+{
+}

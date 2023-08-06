@@ -1,36 +1,59 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Report.Web.Models;
+﻿namespace Report.Web.Controllers;
 
-namespace Report.Web.Controllers;
-
+[Authorize]
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly IReportService _reportService;
 
-    public IActionResult SimpleAction(string arg)
+    public HomeController(IReportService reportService)
     {
-        return Ok(arg);
-    }
-    
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
+        _reportService = reportService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        var userId = int.Parse(User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+        
+        var toDayTurnOverResult = await _reportService.GetToDayTurnOverAsync(userId);
+        switch (toDayTurnOverResult)
+        {
+            case OkResult<decimal> toDayTurnOver:
+                ViewBag.ToDayTurnOver = toDayTurnOver.Result;
+                break;
+            case ErrorResult error:
+                return Redirect(
+                    $"/ExtraPages/Error?message={WebUtility.UrlEncode(error.Message + Environment.NewLine + error.Exception)}");
+            default:
+                return Redirect($"/ExtraPages/Error?message={500}");
+        }
+
+        var toDayClearResult = await _reportService.GetToDayClearAsync(userId);
+
+        switch (toDayClearResult)
+        {
+            case OkResult<decimal> toDayClear:
+                ViewBag.ToDayClear = toDayClear.Result;
+                break;
+            case ErrorResult error:
+                return Redirect(
+                    $"/ExtraPages/Error?message={WebUtility.UrlEncode(error.Message + Environment.NewLine + error.Exception)}");
+            default:
+                return Redirect($"/ExtraPages/Error?message={500}");
+        }
+
+        var toDaySalesResult = await _reportService.GetToDaySalesQuantityAsync(userId);
+
+        switch (toDaySalesResult)
+        {
+            case OkResult<decimal> toDaySales:
+                ViewBag.ToDaySales = toDaySales.Result;
+                break;
+            case ErrorResult error:
+                return Redirect(
+                    $"/ExtraPages/Error?message={WebUtility.UrlEncode(error.Message + Environment.NewLine + error.Exception)}");
+            default:
+                return Redirect($"/ExtraPages/Error?message={500}");
+        }
         return View();
     }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    // public IActionResult Error()
-    // {
-        // return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    // }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace Report.Web.Controllers;
+﻿namespace Report.Web.Controllers;
 
 public class ExtraPages : Controller
 {

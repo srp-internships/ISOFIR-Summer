@@ -1,6 +1,6 @@
 ﻿namespace Report.Application.RequestModels;
 
-public class StorageRequestModel:BaseRequestModel
+public class StorageRequestModel : BaseRequestModel
 {
-    public string Name { get; set; }=string.Empty;
+    public string Name { get; set; } = string.Empty;
 }

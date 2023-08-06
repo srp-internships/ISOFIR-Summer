@@ -2,7 +2,6 @@
 
 namespace Report.Application.Common.Interfaces.Repositories;
 
-public interface IMoveProductLogRepository:IRepository<MoveProductLog>
+public interface IMoveProductLogRepository : IRepository<MoveProductLog>
 {
-    
 }

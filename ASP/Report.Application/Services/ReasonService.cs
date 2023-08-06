@@ -10,8 +10,8 @@ namespace Report.Application.Services;
 
 public class ReasonService : IReasonService
 {
-    private readonly IReasonRepository _reasonReasonRepository;
     private readonly IMapper _mapper;
+    private readonly IReasonRepository _reasonReasonRepository;
 
     public ReasonService(IReasonRepository reasonRepository, IMapper mapper)
     {
@@ -26,10 +26,10 @@ public class ReasonService : IReasonService
             var category = _mapper.Map<ReasonRequestModel, Reason>(reasonDto);
             if (category == null)
                 return new ErrorResult(new Exception(), "Невозможно обработать ваши данные");
-            
+
 
             var old = await _reasonReasonRepository.GetByIdAsync(category.Id);
-            if (old!=null)
+            if (old != null)
                 old.Name = category.Name;
             else
                 await _reasonReasonRepository.AddAsync(category);
@@ -56,11 +56,11 @@ public class ReasonService : IReasonService
         }
     }
 
-    public async Task<Result> GetAllAsync()
+    public async Task<Result> GetAllAsync(int userId)
     {
         try
         {
-            var result = await _reasonReasonRepository.GetAllAsync();
+            var result = await _reasonReasonRepository.GetAllAsync(userId);
             return new OkResult<List<ReasonResponseModel>>(result
                 .Select(s => _mapper.Map<Reason, ReasonResponseModel>(s)).ToList());
         }

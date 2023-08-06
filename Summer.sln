@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{B7D9B2F8-5C76-489D-9122-5E433B42AAF6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "View", "View", "{F56BFDE1-2F0B-44CF-A932-AD0A4038FE54}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{F56BFDE1-2F0B-44CF-A932-AD0A4038FE54}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Warehouse", "Warehouse", "{C3FAC5BD-6168-4F52-A904-B8B73C5C6666}"
 EndProject
@@ -60,6 +60,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentCard.Client", "Blazo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentCard.Client.Application", "Blazor\StudentCard.Client.Application\StudentCard.Client.Application.csproj", "{CA2B6618-99A3-46C8-AEBD-AA76D6B3AF28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Report.Admin", "ASP\Report.Admin\Report.Admin.csproj", "{811869A3-79E6-4355-84ED-BF2F90EC8355}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,7 @@ Global
 		{DA066226-2F73-42F1-9326-874FFC0CB93A} = {3ADAF8E4-7409-48ED-A2DB-A0C48F8CD2E8}
 		{220D1170-C67C-4EFF-8ACB-4A7A352FDE37} = {506E2D4B-2A7C-4B6D-8B37-A8E51BA4981E}
 		{CA2B6618-99A3-46C8-AEBD-AA76D6B3AF28} = {506E2D4B-2A7C-4B6D-8B37-A8E51BA4981E}
+		{811869A3-79E6-4355-84ED-BF2F90EC8355} = {F56BFDE1-2F0B-44CF-A932-AD0A4038FE54}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{23A35D1C-830D-43FD-8342-E339E05A322B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -154,5 +157,9 @@ Global
 		{CA2B6618-99A3-46C8-AEBD-AA76D6B3AF28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA2B6618-99A3-46C8-AEBD-AA76D6B3AF28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA2B6618-99A3-46C8-AEBD-AA76D6B3AF28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{811869A3-79E6-4355-84ED-BF2F90EC8355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{811869A3-79E6-4355-84ED-BF2F90EC8355}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{811869A3-79E6-4355-84ED-BF2F90EC8355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{811869A3-79E6-4355-84ED-BF2F90EC8355}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

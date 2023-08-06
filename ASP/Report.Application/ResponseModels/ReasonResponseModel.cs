@@ -2,7 +2,7 @@
 
 namespace Report.Application.ResponseModels;
 
-public class ReasonResponseModel:BaseNetWorth
+public class ReasonResponseModel : BaseEntitiesNetWorth
 {
     public string Name { get; set; } = "";
 }

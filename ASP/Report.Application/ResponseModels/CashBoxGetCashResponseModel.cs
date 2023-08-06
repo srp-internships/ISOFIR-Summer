@@ -2,6 +2,6 @@
 
 namespace Report.Application.ResponseModels;
 
-public class CashBoxGetCashResponseModel: BaseNetWorth
+public class CashBoxGetCashResponseModel : BaseEntitiesNetWorth
 {
 }

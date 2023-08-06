@@ -5,7 +5,7 @@ using Report.Infrastructure.Persistence.DataBase;
 
 namespace Report.Infrastructure.Persistence.Repositories;
 
-public class StorageRepository:Repository<Storage>,IStorageRepository
+public class StorageRepository : Repository<Storage>, IStorageRepository
 {
     public StorageRepository(DataContext context) : base(context)
     {
@@ -16,14 +16,14 @@ public class StorageRepository:Repository<Storage>,IStorageRepository
         var rest = await Context.RestProducts.FirstOrDefaultAsync(s =>
             s.ProductId == fromRest.ProductId && s.StorageId == toStorageId &&
             s.InvoicePriceUsd == fromRest.InvoicePriceUsd);
-        
+
         if (rest != null) return rest;
         rest = new RestProduct
         {
             StorageId = toStorageId,
             ProductId = fromRest.ProductId
         };
-        
+
         await Context.RestProducts.AddAsync(rest);
         await Context.SaveChangesAsync();
 
@@ -32,14 +32,21 @@ public class StorageRepository:Repository<Storage>,IStorageRepository
 
     public async Task<List<RestProduct>> GetStorageRestsAsync(int storageId)
     {
-        var storage = await Context.Storages.Include(s => s.RestProducts).ThenInclude(p=>p.Product).FirstOrDefaultAsync(s => s.Id == storageId);
-        return storage is { RestProducts: not null } ? storage.RestProducts.ToList() : new List<RestProduct>();
+        var storage = await Context.Storages.Include(s => s.RestProducts).ThenInclude(p => p.Product)
+            .FirstOrDefaultAsync(s => s.Id == storageId);
+        return storage is { RestProducts: not null }
+            ? storage.RestProducts.OrderBy(s => s.Product.Name).ToList()
+            : new List<RestProduct>();
     }
 
     public async Task<int?> GetIdByNameAsync(string name)
     {
-        
-        var res = await Context.Storages.FirstOrDefaultAsync(s=>s.Name.ToLower().Trim()==name.Trim().ToLower());
+        var res = await Context.Storages.FirstOrDefaultAsync(s => s.Name.ToLower().Trim() == name.Trim().ToLower());
         return res?.Id;
+    }
+
+    public Task<List<Storage>> GetStoragesWithRestsAsync(int userId)
+    {
+        return Context.Storages.Include(s => s.RestProducts).ThenInclude(s=>s.Product).Where(s=>s.UserId==userId).OrderBy(s => s.Name).ToListAsync();
     }
 }

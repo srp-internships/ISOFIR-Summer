@@ -1,6 +1,6 @@
 ﻿namespace Report.Domain.Models;
 
-public class BaseNetWorth:BaseModel
+public abstract class BaseEntitiesNetWorth : BaseEntitiesModel
 {
     public decimal CashTjs { get; set; }
     public decimal CashUsd { get; set; }

@@ -7,19 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Warehouse.Infrastructure\Warehouse.Infrastructure.csproj" />
+        <ProjectReference Include="..\Warehouse.Infrastructure\Warehouse.Infrastructure.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Product\Index.cshtml" />
+        <AdditionalFiles Include="Views\Product\Index.cshtml"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages" />
+        <Folder Include="Pages"/>
     </ItemGroup>
 
 </Project>

@@ -1,15 +1,13 @@
-﻿@using Report.Application.ResponseModels
-@model Report.Application.RequestModels.SaleRequestModel
+﻿@model SaleRequestModel
 
 @{
     ViewBag.Title = "Продажа";
-    Layout = "_Layout";
 }
 <form asp-action="Sale" method="post">
-    <input type="hidden" asp-for="RestId"/>
-    <div class="container">
+    <input type="hidden" asp-for="RestProductId"/>
+    <div style="padding:5px">
         <div class="row text-center">
-            <div class="col-3">
+            <div class="col-2">
                 <div>
                     <label>Категория</label>
                     <select class="form-select">
@@ -27,42 +25,47 @@
                 </div>
             </div>
             <div class="col">
-                <div class="col overflow-auto" id="Rests">
-
-                </div>
-                <div class="col overflow-auto">
-                        <label>Клиент</label>
-                        <select class="form-select" asp-for="ClientId">
-                            @if (ViewBag.Clients != null)
+                <div style="height: calc(100vh - 50vh - 80px);overflow-x: hidden!important;" class="col overflow-auto">
+                    <label>Клиент</label>
+                    <select class="form-select" asp-for="ClientId">
+                        @if (ViewBag.Clients != null)
+                        {
+                            var clients = (List<GetClientForSelectResponseModel>)ViewBag.Clients;
+                            foreach (var client in clients)
                             {
-                                var clients = (List<GetClientForSelectResponseModel>)ViewBag.Clients;
-                                foreach (var client in clients)
-                                {
-                                    <option value="@client.Id" onselect="ClientSelected(@client.Id)">@client.Name</option>
-                                }
+                                <option value="@client.Id" onclick="ClientSelected(@client.Id)">@client.Name</option>
                             }
-                        </select>
+                        }
+                    </select>
                     <div class="row" id="ClientHistory"></div>
                 </div>
+
+                <div style="height: calc(100vh - 54vh)" class="col overflow-auto" id="Rests"></div>
+
             </div>
-            <div class="col-2">
+            <div class="col-2" style="width:22%">
+                <input type="hidden" asp-for="UserId" value="@User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value"/>
                 <div>
-                    <label>Количество</label>
-                    <input type="number" asp-for="Quantity"/>
-                    
-                    <label>Цена продажи(TJS)</label>
-                    <input type="number" asp-for="SalePriceTjs"/>
-                    
-                    <label>Цена продажи(USD)</label>
-                    <input type="number" asp-for="SalePriceUsd"/>
+                    <label class="form-label">Количество</label>
+                    <input type="number" asp-for="Quantity" class="form-control"/>
+
+                    <label class="form-label">Цена продажи(TJS)</label>
+                    <input type="text" asp-for="PriceTjs" onkeyup="convertToDollar()" class="form-control"/>
+
+                    <label class="form-label">Цена продажи(USD)</label>
+                    <input type="text" asp-for="PriceUsd" onkeyup="convertToSomoni()" class="form-control"/>
+                    <label class="form-label">Цена продажи(USD)</label>
+                    <input type="datetime-local" asp-for="DateTime" class="form-control"/>
                 </div>
+                <div class="col" id="ClientInfo" style="height: calc(100vh - 60vh);overflow-y: auto!important;"></div>
             </div>
         </div>
     </div>
     <button class="btn-primary btn">Завершить покупку!</button>
 </form>
 <script>
-function ViewProductsByCategory(categoryId){
+var now = new Date();var formattedDateTime = now.toISOString().slice(0, 16);document.getElementById("DateTime").value = formattedDateTime;
+    function ViewProductsByCategory(categoryId){
     $.ajax({
         type: "POST",              
         url: "/Sale/GetProductsByCategory",        
@@ -92,10 +95,54 @@ function ViewProductsByCategory(categoryId){
     }
     
     function ClientSelected(clientId){
-            
+        $.ajax({
+        type: "POST",
+        url: "/Sale/GetClientHistory",        
+        data: { 
+            clientId:clientId
+        },
+        datatype: "html",
+        success: function (data) {
+                document.getElementById('ClientHistory').innerHTML='';
+                $('#ClientHistory').html(data);
+            }
+        });
+        
+        $.ajax(
+            {
+                type: "POST",
+                url: "/Sale/GetClientInfo",
+                data: { 
+                    clientId:clientId
+                },
+                datatype: "html",
+                success: function (data) {
+                    document.getElementById('ClientInfo').innerHTML='';
+                    $('#ClientInfo').html(data);
+                }
+            }
+        )
     }
     
     function RestSelected(restId){
-        document.getElementById('RestId').value=restId;
+        let restTrs = document.getElementsByClassName("RestTableTr");
+        for (let i = 0; i < restTrs.length; i++) {
+            restTrs[i].style.backgroundColor = "transparent";
+        }
+        document.getElementById('RestProductId').value=restId;
     }
+    
+    function convertToDollar() {
+      var priceInSomoni = document.getElementById("PriceTjs").value;
+      var priceInDollars = parseFloat(priceInSomoni) / parseFloat(rate);
+      document.getElementById("PriceUsd").value = priceInDollars.toFixed(2);
+    }
+    
+    function convertToSomoni() {
+      var priceInDollars = document.getElementById("PriceUsd").value;
+      var priceInSomoni = parseFloat(priceInDollars) * parseFloat(rate);
+      document.getElementById("PriceTjs").value = priceInSomoni.toFixed(2);
+    }
+    
+let rate = parseFloat(@ViewBag.Rate);    
 </script>

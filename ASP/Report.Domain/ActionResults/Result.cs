@@ -2,18 +2,15 @@
 
 public class Result
 {
-    
-}
-public class Result<TData>:Result
-{
 }
 
 
-public class OkResult:Result
+
+public class OkResult : Result
 {
-    
 }
-    public class OkResult<TData>:Result<TData>
+
+public class OkResult<TData> : Result
 {
     public TData Result;
 
@@ -24,17 +21,23 @@ public class OkResult:Result
 
     public override string ToString()
     {
-        return Result+"";
+        return Result + "";
     }
 }
 
-public class ErrorResult:Result
+public class ErrorResult : Result
 {
-    public ErrorResult(Exception exception, string message="")
+    public Exception Exception;
+    public string Message;
+
+    public ErrorResult(Exception exception, string message = "")
     {
         Exception = exception;
         Message = message;
     }
-    public Exception Exception;
-    public string Message;
+
+    public ErrorResult(string message)
+    {
+        Message = message;
+    }
 }

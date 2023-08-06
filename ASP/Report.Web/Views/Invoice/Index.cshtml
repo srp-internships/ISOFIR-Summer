@@ -1,10 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using Report.Application.ResponseModels
-@model Report.Application.RequestModels.InvoiceRequestModel
+@model InvoiceRequestModel
 
 @{
     ViewBag.Title = "Покупка. История покупок";
-    Layout = "_Layout";
 }
 
 <table class="table">
@@ -20,7 +18,7 @@
     </tr>
     </thead>
     <tbody>
-    @if (ViewBag.InvoicesLogs!= null)
+    @if (ViewBag.InvoicesLogs != null)
     {
         var invoicesLogs = (List<InvoicesLogResponseModel>)ViewBag.InvoicesLogs;
         for (var i = 0; i < invoicesLogs.Count; i++)
@@ -53,6 +51,8 @@
             </div>
             <form method="post" enctype="multipart/form-data">
                 <div class="modal-body">
+                    <input type="hidden" asp-for="UserId" value="@User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value"/>
+
                     <div class="card-body">
                         <div class="mt-2">
                             <label class="form-label">Продукт</label>
@@ -62,52 +62,52 @@
                                     var products = (List<ProductResponseModel>)ViewBag.Products;
                                     foreach (var product in products)
                                     {
-                                        <option value="@(product.Id)">@(product.Name)</option>                                        
+                                        <option value="@(product.Id)">@(product.Name)</option>
                                     }
                                 }
                             </select>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Фирма</label>
-                            
+
                             <select asp-for="FirmId">
                                 @if (ViewBag.Firms != null)
                                 {
                                     var firms = (List<FirmResponseModel>)ViewBag.Firms;
                                     foreach (var firm in firms)
                                     {
-                                        <option value="@(firm.Id)">@(firm.Name)</option>                                        
+                                        <option value="@(firm.Id)">@(firm.Name)</option>
                                     }
                                 }
                             </select>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Склад</label>
-                            
+
                             <select asp-for="StorageId">
                                 @if (ViewBag.Storages != null)
                                 {
                                     var storages = (List<StorageResponseModel>)ViewBag.Storages;
                                     foreach (var storage in storages)
                                     {
-                                        <option value="@(storage.Id)">@(storage.Name)</option>                                        
+                                        <option value="@(storage.Id)">@(storage.Name)</option>
                                     }
                                 }
                             </select>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Количество</label>
                             <input class="form-control" type="number" asp-for="Quantity"/>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Цена(Сомони)</label>
                             <input class="form-control" type="number" asp-for="PriceTjs"/>
                         </div>
-                        
+
                         <div class="mt-2">
                             <label class="form-label">Цена(Доллар)</label>
                             <input class="form-control" type="number" asp-for="PriceUsd"/>

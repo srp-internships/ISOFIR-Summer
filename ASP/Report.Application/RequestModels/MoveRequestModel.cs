@@ -1,6 +1,6 @@
 ﻿namespace Report.Application.RequestModels;
 
-public class MoveRequestModel
+public class MoveRequestModel : BaseRequestModel
 {
     public int FromRestId { get; set; }
     public int ToStorageId { get; set; }

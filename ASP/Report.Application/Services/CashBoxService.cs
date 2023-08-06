@@ -8,10 +8,11 @@ using Report.Domain.Models;
 
 namespace Report.Application.Services;
 
-public class CashBoxService:ICashBoxService
+public class CashBoxService : ICashBoxService
 {
     private readonly ICashBoxRepository _cashBoxRepository;
     private readonly IMapper _mapper;
+
     public CashBoxService(ICashBoxRepository cashBoxRepository, IMapper mapper)
     {
         _cashBoxRepository = cashBoxRepository;
@@ -26,7 +27,7 @@ public class CashBoxService:ICashBoxService
             if (old == null)
             {
                 var cashBox = _mapper.Map<CashBoxRequestModel, CashBox>(cashBoxDto);
-                if (cashBox==null)
+                if (cashBox == null)
                     return new ErrorResult(new Exception(), "Ошибка при обработке данных");
                 await _cashBoxRepository.AddAsync(cashBox);
             }
@@ -49,10 +50,11 @@ public class CashBoxService:ICashBoxService
         try
         {
             var cashBox = await _cashBoxRepository.GetByIdAsync(cashBoxId);
-            if (cashBox==null)
+            if (cashBox == null)
                 return new ErrorResult(new Exception(), "Не удалось найти эту кассу");
-            
-            return new OkResult<CashBoxGetCashResponseModel>(_mapper.Map<CashBox,CashBoxGetCashResponseModel>(cashBox));
+
+            return new OkResult<CashBoxGetCashResponseModel>(
+                _mapper.Map<CashBox, CashBoxGetCashResponseModel>(cashBox));
         }
         catch (Exception e)
         {
@@ -65,11 +67,11 @@ public class CashBoxService:ICashBoxService
         throw new NotImplementedException();
     }
 
-    public async Task<Result> GetAllAsync()
+    public async Task<Result> GetAllAsync(int userId)
     {
         try
         {
-            var res = await _cashBoxRepository.GetAllAsync();
+            var res = await _cashBoxRepository.GetAllAsync(userId);
             return new OkResult<List<CashBoxResponseModel>>(res
                 .Select(s => _mapper.Map<CashBox, CashBoxResponseModel>(s)).ToList());
         }
@@ -78,5 +80,4 @@ public class CashBoxService:ICashBoxService
             return new ErrorResult(e);
         }
     }
-
 }

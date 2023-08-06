@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Остатки по складам";
+}
+
+<div class="container-fluid" style="margin: auto">
+    <div class="row">
+        <div class="col-3 overflow-auto" style="height: calc(100vh - 100px)">
+            <table class="table">
+                <tbody>
+                @if (ViewBag.Storages != null)
+                {
+                    var storages = (List<StorageResponseModel>)ViewBag.Storages;
+                    foreach (var storage in storages)
+                    {
+                        <tr>
+                            <td onclick="StorageSelected(@storage.Id)">@storage.Name</td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+        <div class="col overflow-auto" style="height: calc(100vh - 100px)" id="Rests">
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function StorageSelected(storageId){
+        $.ajax(
+            {
+                url: '@Url.Action("GetStorageRest", "Report")',
+                type: 'GET',
+                data: { storageId: storageId },
+                success: function (data) {
+                    $('#Rests').html(data);
+                }
+            }
+        )
+    }
+</script>

@@ -1,60 +1,64 @@
-﻿@using Report.Application.ResponseModels
-@model Report.Application.RequestModels.RestFilterRequestModel
+﻿@model RestFilterRequestModel
 
 @{
     ViewBag.Title = "Остатки";
-    Layout = "_Layout";
 }
 
-<div class="row">
+<div class="row" style="margin: auto">
     <div class="row">
-        <div class="col-3"><div class="row">
-            <label>Склад</label>
-            <select class="form-select">
-                <option selected="selected"  onclick="StorageChanged(0)">Все</option>
-                @if (ViewBag.Storages != null)
-                {
-                    var storages = (List<StorageResponseModel>)ViewBag.Storages;
-                    foreach (var storage in storages)
+        <div class="col-3">
+            <div class="row">
+                <label>Склад</label>
+                <select class="form-select">
+                    <option selected="selected" onclick="StorageChanged(0)">Все</option>
+                    @if (ViewBag.Storages != null)
                     {
-                        <option value="@(storage.Id)" onclick="StorageChanged(@(storage.Id))">@(storage.Name)</option>
+                        var storages = (List<StorageResponseModel>)ViewBag.Storages;
+                        foreach (var storage in storages)
+                        {
+                            <option value="@(storage.Id)" onclick="StorageChanged(@(storage.Id))">@(storage.Name)</option>
+                        }
                     }
-                }
-            </select>
-        </div></div>
-        <div class="col-3"><div class="row">
-            <label>Продукт</label>
-            <select class="form-select">
-                <option selected="selected" onclick="ProductChanged(0)">Все</option>
-                @if (ViewBag.Products != null)
-                {
-                    var products = (List<ProductResponseModel>)ViewBag.Products;
-                    foreach (var product in products)
+                </select>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <label>Продукт</label>
+                <select class="form-select">
+                    <option selected="selected" onclick="ProductChanged(0)">Все</option>
+                    @if (ViewBag.Products != null)
                     {
-                        <option value="@(product.Id)" onclick="ProductChanged(@(product.Id))">@(product.Name)</option>
+                        var products = (List<ProductResponseModel>)ViewBag.Products;
+                        foreach (var product in products)
+                        {
+                            <option value="@(product.Id)" onclick="ProductChanged(@(product.Id))">@(product.Name)</option>
+                        }
                     }
-                }
 
-            </select>
-        </div></div>
-        <div class="col-3"><div class="row">
-            <label>Фирма</label>
-            <select class="form-select">
-                <option selected="selected">Все</option>
-                @if (ViewBag.Firms != null)
-                {
-                    var firms = (List<FirmResponseModel>)ViewBag.Firms;
-                    foreach (var firm in firms)
+                </select>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <label>Фирма</label>
+                <select class="form-select">
+                    <option selected="selected">Все</option>
+                    @if (ViewBag.Firms != null)
                     {
-                        <option value="@(firm.Id)" onclick="FirmChanged(@(firm.Id))">@(firm.Name)</option>
+                        var firms = (List<FirmResponseModel>)ViewBag.Firms;
+                        foreach (var firm in firms)
+                        {
+                            <option value="@(firm.Id)" onclick="FirmChanged(@(firm.Id))">@(firm.Name)</option>
+                        }
                     }
-                }
-            </select>
-        </div></div>
+                </select>
+            </div>
+        </div>
 
     </div>
     <div class="row" id="TableContainer">
-        
+
     </div>
 </div>
 <script>

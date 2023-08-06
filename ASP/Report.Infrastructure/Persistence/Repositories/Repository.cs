@@ -5,10 +5,10 @@ using Report.Infrastructure.Persistence.DataBase;
 
 namespace Report.Infrastructure.Persistence.Repositories;
 
-public class Repository<TEntity>:IRepository<TEntity> where TEntity :BaseModel
+public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntitiesModel
 {
-    protected readonly DbSet<TEntity> Set;
     protected readonly DataContext Context;
+    protected readonly DbSet<TEntity> Set;
 
     public Repository(DataContext context)
     {
@@ -27,11 +27,11 @@ public class Repository<TEntity>:IRepository<TEntity> where TEntity :BaseModel
         return Set.AnyAsync(s => s.Id == id);
     }
 
-    public Task<List<TEntity>> GetAllAsync()
+    public Task<List<TEntity>> GetAllAsync(int userId)
     {
-        return Set.ToListAsync();
+        return Set.Where(s => s.UserId == userId).ToListAsync();
     }
-    
+
     public async Task RemoveAsync(int id)
     {
         var entity = await Set.FirstAsync(s => s.Id == id);

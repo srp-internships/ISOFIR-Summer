@@ -1,11 +1,9 @@
-﻿@using Report.Application.ResponseModels
-@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Newtonsoft.Json
-@model Report.Application.RequestModels.StorageRequestModel
+@model StorageRequestModel
 
 @{
     ViewBag.Title = "Склады";
-    Layout = "_Layout";
 }
 
 <table class="table">
@@ -48,6 +46,7 @@
             </div>
             <form method="post" asp-action="AddStorage">
                 <div class="modal-body">
+                    <input type="hidden" asp-for="UserId" value="@User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value"/>
                     <input type="hidden" asp-for="Id"/>
                     <div class="card-body">
                         <div class="mt-2">

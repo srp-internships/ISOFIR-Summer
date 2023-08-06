@@ -2,7 +2,7 @@
 
 namespace Report.Application.ResponseModels;
 
-public class ReasonCashBoxResponseModel:BaseNetWorth
+public class ReasonCashBoxResponseModel : BaseEntitiesNetWorth
 {
     public string DateTime { get; set; } = "";
     public string ReasonName { get; set; } = "";

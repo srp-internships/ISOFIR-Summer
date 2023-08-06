@@ -1,6 +1,6 @@
 ﻿namespace Report.Domain.Models;
 
-public class ClientCashLog:BaseNetWorth
+public class ClientCashLog : BaseEntitiesNetWorth
 {
     public int ClientId { get; set; }
     public Client? Client { get; set; }

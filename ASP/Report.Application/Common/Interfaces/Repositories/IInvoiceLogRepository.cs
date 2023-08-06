@@ -2,7 +2,6 @@
 
 namespace Report.Application.Common.Interfaces.Repositories;
 
-public interface IInvoiceLogRepository:IRepository<InvoiceLog>
+public interface IInvoiceLogRepository : IRepository<InvoiceLog>
 {
-    
 }

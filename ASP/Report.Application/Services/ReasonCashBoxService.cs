@@ -8,13 +8,14 @@ using Report.Domain.Models;
 
 namespace Report.Application.Services;
 
-public class ReasonCashBoxService:IReasonCashBoxService
+public class ReasonCashBoxService : IReasonCashBoxService
 {
-    private readonly IReasonCashLogRepository _reasonCashLogRepository;
     private readonly ICashBoxRepository _cashBoxRepository;
     private readonly IMapper _mapper;
+    private readonly IReasonCashLogRepository _reasonCashLogRepository;
 
-    public ReasonCashBoxService(IMapper mapper, IReasonCashLogRepository reasonCashLogRepository, ICashBoxRepository cashBoxRepository)
+    public ReasonCashBoxService(IMapper mapper, IReasonCashLogRepository reasonCashLogRepository,
+        ICashBoxRepository cashBoxRepository)
     {
         _mapper = mapper;
         _reasonCashLogRepository = reasonCashLogRepository;
@@ -31,7 +32,7 @@ public class ReasonCashBoxService:IReasonCashBoxService
             await _reasonCashLogRepository.AddAsync(log);
 
             var cashBox = await _cashBoxRepository.GetByIdAsync(reasonCash.CashBoxId);
-            if (cashBox==null)
+            if (cashBox == null)
                 return new ErrorResult(new Exception(), "Вы выбрали недействительную кассу");
             cashBox.CashTjs += reasonCash.CashTjs;
             cashBox.CashUsd += reasonCash.CashUsd;
@@ -46,11 +47,11 @@ public class ReasonCashBoxService:IReasonCashBoxService
         }
     }
 
-    public async Task<Result> GetAllHistoryAsync()
+    public async Task<Result> GetAllHistoryAsync(int userId)
     {
         try
         {
-            var all = await _reasonCashLogRepository.GetAllAsync();
+            var all = await _reasonCashLogRepository.GetAllAsync(userId);
             return new OkResult<List<ReasonCashBoxResponseModel>>(all
                 .Select(s => _mapper.Map<ReasonCashLog, ReasonCashBoxResponseModel>(s)).ToList());
         }

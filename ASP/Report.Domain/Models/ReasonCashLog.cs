@@ -1,6 +1,6 @@
 ﻿namespace Report.Domain.Models;
 
-public class ReasonCashLog:BaseNetWorth
+public class ReasonCashLog : BaseEntitiesNetWorth
 {
     public int ReasonId { get; set; }
     public Reason? Reason { get; set; }

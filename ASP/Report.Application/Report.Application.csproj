@@ -7,13 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Report.Domain\Report.Domain.csproj" />
+        <ProjectReference Include="..\Report.Domain\Report.Domain.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-      <PackageReference Include="EPPlus" Version="6.2.7" />
-      <PackageReference Include="LinqForEEPlus" Version="1.0.1" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1"/>
+        <PackageReference Include="EPPlus" Version="6.2.7"/>
+        <PackageReference Include="LinqForEEPlus" Version="1.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.9"/>
     </ItemGroup>
 
 </Project>

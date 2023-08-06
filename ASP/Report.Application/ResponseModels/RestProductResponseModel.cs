@@ -15,5 +15,4 @@ public class RestProductResponseModel
     public string ProductName { get; init; } = "";
     public string StorageName { get; init; } = "";
     public string FirmName { get; init; } = "";
-
 }

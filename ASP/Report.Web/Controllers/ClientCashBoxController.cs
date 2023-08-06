@@ -1,20 +1,14 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
-using Report.Application.Common.Interfaces.Services;
-using Report.Application.RequestModels;
-using Report.Application.ResponseModels;
-using Report.Domain.ActionResults;
-using OkResult = Report.Domain.ActionResults.OkResult;
+﻿namespace Report.Web.Controllers;
 
-namespace Report.Web.Controllers;
-
+[Authorize]
 public class ClientCashBoxController : Controller
 {
     private readonly ICashBoxService _cashBoxService;
     private readonly IClientCashBoxService _clientCashBoxService;
     private readonly IClientService _clientService;
 
-    public ClientCashBoxController(ICashBoxService cashBoxService, IClientCashBoxService clientCashBoxService, IClientService clientService)
+    public ClientCashBoxController(ICashBoxService cashBoxService, IClientCashBoxService clientCashBoxService,
+        IClientService clientService)
     {
         _cashBoxService = cashBoxService;
         _clientCashBoxService = clientCashBoxService;
@@ -23,7 +17,9 @@ public class ClientCashBoxController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var cashBoxesResult = await _cashBoxService.GetAllAsync();
+        var userId = int.Parse(HttpContext.User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+
+        var cashBoxesResult = await _cashBoxService.GetAllAsync(userId);
 
         switch (cashBoxesResult)
         {
@@ -37,7 +33,7 @@ public class ClientCashBoxController : Controller
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
 
-        var clientsHistoryResult = await _clientCashBoxService.GetAllHistoryAsync();
+        var clientsHistoryResult = await _clientCashBoxService.GetAllHistoryAsync(userId);
 
         switch (clientsHistoryResult)
         {
@@ -51,7 +47,7 @@ public class ClientCashBoxController : Controller
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
 
-        var clientsResult = await _clientService.GetAllAsync();
+        var clientsResult = await _clientService.GetAllAsync(userId);
 
         switch (clientsResult)
         {
@@ -64,12 +60,15 @@ public class ClientCashBoxController : Controller
             default:
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
+
         return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> Submit(ClientCashBoxRequestModel model)
     {
+        var userId = int.Parse(User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+        model.UserId = userId;
         var response = await _clientCashBoxService.PayWithDraw(model);
         return response switch
         {
@@ -83,6 +82,8 @@ public class ClientCashBoxController : Controller
     [HttpPost]
     public async Task<IActionResult> Pay(ClientCashBoxRequestModel model)
     {
+        var userId = int.Parse(User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+        model.UserId = userId;
         var response = await _clientCashBoxService.PayWithDraw(model);
         return response switch
         {
@@ -96,6 +97,9 @@ public class ClientCashBoxController : Controller
     [HttpPost]
     public async Task<IActionResult> WithDraw(ClientCashBoxRequestModel model)
     {
+        var userId = int.Parse(User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+        model.UserId = userId;
+
         model.CashUsd = -model.CashUsd;
         model.CashTjs = -model.CashTjs;
         var response = await _clientCashBoxService.PayWithDraw(model);

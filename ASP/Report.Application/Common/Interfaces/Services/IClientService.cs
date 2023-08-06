@@ -7,6 +7,8 @@ public interface IClientService
 {
     public Task<Result> CreateOrUpdateAsync(ClientRequestModel clientDto);
     public Task<Result> RemoveAsync(int id);
-    public Task<Result> GetAllAsync();
-    public Task<Result> GetClientsForSelectAsync();
+    public Task<Result> GetAllAsync(int userId);
+    public Task<Result> GetClientsForSelectAsync(int userId);
+    public Task<Result> GetByIdAsync(int id);
+    public Task<Result> GetClientPaysAsync(int clientId);
 }

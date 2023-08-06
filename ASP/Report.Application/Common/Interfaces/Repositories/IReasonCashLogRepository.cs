@@ -2,7 +2,6 @@
 
 namespace Report.Application.Common.Interfaces.Repositories;
 
-public interface IReasonCashLogRepository:IRepository<ReasonCashLog>
+public interface IReasonCashLogRepository : IRepository<ReasonCashLog>
 {
-    
 }

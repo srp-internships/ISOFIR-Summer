@@ -7,5 +7,5 @@ public interface IReasonService
 {
     public Task<Result> CreateOrUpdateAsync(ReasonRequestModel reasonDto);
     public Task<Result> RemoveAsync(int id);
-    public Task<Result> GetAllAsync();
+    public Task<Result> GetAllAsync(int userId);
 }

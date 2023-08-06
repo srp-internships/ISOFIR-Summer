@@ -1,13 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Report.Application.Common.Interfaces.Repositories;
-using Report.Application.Common.Interfaces.Services;
-using Report.Application.RequestModels;
-using Report.Application.ResponseModels;
-using Report.Domain.ActionResults;
-using OkResult = Report.Domain.ActionResults.OkResult;
+﻿namespace Report.Web.Controllers;
 
-namespace Report.Web.Controllers;
-
+[Authorize]
 public class StorageController : Controller
 {
     private readonly IStorageService _storageService;
@@ -19,15 +12,18 @@ public class StorageController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var storageResult = await _storageService.GetAllAsync();
-        
+        var userId = int.Parse(HttpContext.User.Claims.First(s => s.Type == ClaimTypes.NameIdentifier).Value);
+
+        var storageResult = await _storageService.GetAllAsync(userId);
+
         switch (storageResult)
         {
             case OkResult<List<StorageResponseModel>> storages:
                 ViewBag.Storages = storages.Result;
                 break;
             case ErrorResult error:
-                return Redirect($"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}");
+                return Redirect(
+                    $"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}");
             default:
                 return Redirect($"/ExtraPages/Error?message={500}");
         }
@@ -43,7 +39,8 @@ public class StorageController : Controller
         return response switch
         {
             OkResult => RedirectToAction("Index"),
-            ErrorResult error => Redirect($"/ExtraPages/Error?message={error.Message + System.Net.WebUtility.UrlEncode(error.Exception.ToString())}"),
+            ErrorResult error => Redirect(
+                $"/ExtraPages/Error?message={error.Message + WebUtility.UrlEncode(error.Exception.ToString())}"),
             _ => Redirect($"/ExtraPages/Error?message={500}")
         };
     }
