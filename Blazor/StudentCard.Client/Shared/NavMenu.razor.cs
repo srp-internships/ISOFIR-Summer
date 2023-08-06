@@ -26,4 +26,12 @@ public partial class NavMenu
     {
         _agent = await _localStorageService.GetItemAsync<Agent>(LocalStorageKeys.Agent);
     }
+
+    private async Task Logout()
+    {
+        await _localStorageService.ClearAsync();
+        NavigationManager.NavigateTo("/login");
+
+        // await _localStorageService.SetItemAsStringAsync(LocalStorageKeys.Token, null);
+    }
 }

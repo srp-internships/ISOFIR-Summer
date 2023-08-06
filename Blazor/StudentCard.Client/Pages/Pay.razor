@@ -1,0 +1,64 @@
+﻿@page "/Pay"
+
+<PageTitle>Create a agent</PageTitle>
+
+<EditForm Model="_pay" OnSubmit="SubmitAsync">
+    <section class="vh-100" style="background-color: #2779e2;">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-xl-9">
+                    <h1 class="text-white mb-4">Create a student</h1>
+                    <div class="card" style="border-radius: 15px;">
+                        <div class="card-body">
+                            
+                            <div class="row align-items-center pt-4 pb-3">
+                                <div class="col-md-3 ps-5">
+                                    <h6 class="mb-0">Role</h6>
+                                </div>
+                                <div class="col-md-9 pe-5">
+                                    <InputSelect @bind-Value="_pay.AgentId" class="form-select">
+                                        @foreach (var agent in _agents)
+                                        {
+                                            <option value="@agent.Id">@agent.UserName</option>
+                                        }
+                                    </InputSelect>
+                                </div>
+                            </div>
+                            
+                            <div class="row align-items-center pt-4 pb-3">
+                                <div class="col-md-3 ps-5">
+                                    <h6 class="mb-0">Role</h6>
+                                </div>
+                                <div class="col-md-9 pe-5">
+                                    <InputSelect @bind-Value="_pay.StudentId" class="form-select">
+                                        @foreach (var student in    _students)
+                                        {
+                                            <option value="@student.Id">@student.FullName</option>
+                                        }
+                                    </InputSelect>
+                                </div>
+                            </div>
+                            
+                            <hr class="mx-n3">
+                            <div class="row align-items-center pt-4 pb-3">
+                                <div class="col-md-3 ps-5">
+                                    <h6 class="mb-0">Username</h6>
+                                </div>
+                                <div class="col-md-9 pe-5">
+                                    <textinput class="form-control" @bind-Value="_pay.Sum"></textinput>
+                                </div>
+                            </div>
+                            <hr class="mx-n3">
+                            
+                            <div class="px-5 py-4">
+                                <button type="submit" class="btn btn-primary btn-lg">Create</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</EditForm>
