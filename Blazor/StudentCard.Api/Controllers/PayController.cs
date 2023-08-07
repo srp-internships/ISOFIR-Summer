@@ -4,6 +4,7 @@ using StudentCard.Application.Interfaces.Services;
 using StudentCard.Domain;
 using StudentCard.Domain.Models;
 using StudentCard.Domain.RequestModels;
+using StudentCard.Domain.ResponseModels;
 using OkResult = StudentCard.Domain.OkResult;
 
 namespace StudentCard.Api.Controllers;
@@ -24,7 +25,7 @@ public class PayController:ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var result = await _payService.GetAllAsync();
-        if (result is OkResult<List<Pay>> okResult)
+        if (result is OkResult<List<PayResponseModel>> okResult)
         {
             return Ok(okResult.Result);
         }
@@ -36,7 +37,7 @@ public class PayController:ControllerBase
     public async Task<IActionResult> GetById([FromBody] int id)
     {
         var result = await _payService.GetByIdAsync(id);
-        if (result is OkResult<Student> okResult)
+        if (result is OkResult<PayResponseModel> okResult)
         {
             return Ok(okResult.Result);
         }

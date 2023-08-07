@@ -1,1 +1,30 @@
 ﻿@page "/Pays"
+<PageTitle>Students</PageTitle>
+<div class="container-fluid overflow-auto"> 
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Agent</th>
+            <th>Student</th>
+            <th>Sum</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (_pays != null)
+        {
+            foreach (var pay in _pays)
+            {
+                <tr>
+                    <td>@pay.Id</td>
+                    <td>@pay.Agent</td>
+                    <td>@pay.Student</td>
+                    <td>@pay.Sum</td>
+                    <td>@pay.Date</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

@@ -7,13 +7,13 @@
         <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-xl-9">
-                    <h1 class="text-white mb-4">Create a student</h1>
+                    <h1 class="text-white mb-4">Pay</h1>
                     <div class="card" style="border-radius: 15px;">
                         <div class="card-body">
                             
                             <div class="row align-items-center pt-4 pb-3">
                                 <div class="col-md-3 ps-5">
-                                    <h6 class="mb-0">Role</h6>
+                                    <h6 class="mb-0">Agent</h6>
                                 </div>
                                 <div class="col-md-9 pe-5">
                                     <InputSelect @bind-Value="_pay.AgentId" class="form-select">
@@ -27,11 +27,11 @@
                             
                             <div class="row align-items-center pt-4 pb-3">
                                 <div class="col-md-3 ps-5">
-                                    <h6 class="mb-0">Role</h6>
+                                    <h6 class="mb-0">Student</h6>
                                 </div>
                                 <div class="col-md-9 pe-5">
                                     <InputSelect @bind-Value="_pay.StudentId" class="form-select">
-                                        @foreach (var student in    _students)
+                                        @foreach (var student in _students)
                                         {
                                             <option value="@student.Id">@student.FullName</option>
                                         }
@@ -42,16 +42,16 @@
                             <hr class="mx-n3">
                             <div class="row align-items-center pt-4 pb-3">
                                 <div class="col-md-3 ps-5">
-                                    <h6 class="mb-0">Username</h6>
+                                    <h6 class="mb-0">Sum</h6>
                                 </div>
                                 <div class="col-md-9 pe-5">
-                                    <textinput class="form-control" @bind-Value="_pay.Sum"></textinput>
+                                    <input type="text" class="form-control" @bind="_pay.Sum"/>
                                 </div>
                             </div>
                             <hr class="mx-n3">
                             
                             <div class="px-5 py-4">
-                                <button type="submit" class="btn btn-primary btn-lg">Create</button>
+                                <button type="submit" class="btn btn-primary btn-lg">Pay</button>
                             </div>
 
                         </div>

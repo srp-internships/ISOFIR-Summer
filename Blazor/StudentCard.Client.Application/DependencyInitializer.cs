@@ -10,6 +10,7 @@ public static class DependencyInitializer
     {
         services.AddScoped<IAgentService, AgentService>();
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IStudentService, StudentService>();  
+        services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<IPayService, PayService>();
     }
 }
